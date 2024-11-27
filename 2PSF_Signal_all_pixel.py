@@ -55,6 +55,7 @@ for date in date_arr:
     #     os.makedirs(Tiff_location)
     Non_zero_data = []
     Seperation = []
+    plt.rcParams['figure.figsize'] = [10,10]
     # Go through the list of folders inside the data_dir folder
     print(get_immediate_subdirectories(data_dir))
     # Seperation=np.zeros(np.size(get_immediate_subdirectories(data_dir)))
