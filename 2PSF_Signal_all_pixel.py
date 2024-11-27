@@ -64,7 +64,7 @@ for date in date_arr:
         print(data_name)
 
         plt.close('all')
-        plt.rcParams['figure.figsize'] = [12, 12]
+        plt.rcParams['figure.figsize'] = [10,10]
         #First, open the whole stack and average every 10 images. Use the center image of the stack for analysis
         #It is assumed the beads in the center of the stack are the ones best in focus
         # DIR = 'O://Lei/Processed data/PSF NA0.04'
