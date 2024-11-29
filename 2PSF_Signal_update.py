@@ -25,9 +25,6 @@ from scipy.optimize import curve_fit
 from scipy import interpolate
 from skimage import io
 from numpy import asarray as ar
-import matplotlib.font_manager as fm
-print([f.name for f in fm.fontManager.ttflist])
-
 # from scipy import exp
 
 
@@ -190,6 +187,32 @@ for index_file, test_name in enumerate(Main_name_pool):
             labels = measure.label(thresh, connectivity=2.0, background=0)
             mask = np.zeros(thresh.shape, dtype="uint8")
             
+            
+            plt.figure(figsize=(8, 6))
+            
+            # First subplot: normalized image
+            plt.subplot(1, 2, 1)
+            plt.imshow(blurred, cmap='gray', vmax = mean+std)
+            cbar1 = plt.colorbar(shrink=0.4, aspect=10, pad=0.02)  # Adjust colorbar size
+            cbar1.ax.tick_params(labelsize=10)  # Set fontsize for colorbar ticks
+            plt.title('Normalized Image', fontsize=14)
+            plt.xlabel('X-axis label', fontsize=12)
+            plt.ylabel('Y-axis label', fontsize=12)
+            plt.tick_params(axis='both', labelsize=10)
+            
+            # Second subplot: labels
+            plt.subplot(1, 2, 2)
+            plt.imshow(labels)
+            cbar2 = plt.colorbar(shrink=0.4, aspect=10, pad=0.02)  # Adjust colorbar size
+            cbar2.ax.tick_params(labelsize=10)  # Set fontsize for colorbar ticks
+            plt.title('Labels', fontsize=14)
+            plt.xlabel('X-axis label', fontsize=12)
+            plt.ylabel('Y-axis label', fontsize=12)
+            plt.tick_params(axis='both', labelsize=10)
+            
+            # Show the plot with tight layout
+            plt.tight_layout()
+            plt.show()
             
             for label in np.unique(labels):
                 if label == 0:
@@ -409,7 +432,7 @@ for i,idx in enumerate(order):
 
 # Create a violin plot with the reordered groups
 
-plt.figure(figsize=(4.8, 4.1))
+plt.figure(figsize=(4.8, 3.87))
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 # sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile")  # inner=None to hide default statistics
@@ -425,14 +448,58 @@ sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile", palette=c
 # Annotate mean values at the top of the figure
 for i, mean_val in enumerate(reordered_means):
     plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
-             color='black', ha='center', va='bottom', fontdict={'fontname': 'Calibri', 'fontsize': 14})
+             color='black', ha='center', va='bottom', fontsize=10)
 
 # plt.xlabel('Combined Groups')
-plt.ylabel('2P signal (a.u.)', fontdict={'fontname': 'Calibri', 'fontsize': 14})
-plt.xlabel('Repetition rate', fontdict={'fontname': 'Calibri', 'fontsize': 14})
+plt.ylabel('2P signal (a.u.)',fontsize = 12)
+plt.xlabel('Repetition rate',fontsize = 12)
 # plt.title('Violin Plot of Non-zero Intensity Data Grouped by Combined Seperation with Mean Values Marked')
 plt.xticks(rotation=0, ha='center')
 plt.tight_layout()
 
 # Display the plot
 plt.show()
+#%%
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# Assuming `order`, `group_data_list`, `group_means`, `colors` are defined and initialized
+
+# Your existing code for setting up reordered labels and data
+test_name_pool_label = ['10 MHz', '2 MHz', '4 MHz', '2x2 MHz', '8 MHz', '2x2x2 MHz']
+reordered_labels = []
+reordered_data = []
+reordered_means = []
+
+for i, idx in enumerate(order):
+    label = test_name_pool_label[i]
+    reordered_labels.extend([label] * len(group_data_list[idx]))
+    reordered_data.extend(group_data_list[idx])
+    reordered_means.append(group_means[idx])
+
+# Plotting
+plt.figure(figsize=(4.8, 3.87))
+plt.rcParams['font.size'] = 10
+plt.rcParams['axes.linewidth'] = 2
+
+# Violin plot with custom color palette
+sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile", palette=colors)
+
+# Annotate mean values at the top of each group
+for i, mean_val in enumerate(reordered_means):
+    plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
+             color='black', ha='center', va='bottom', fontsize=10)
+
+# Setting axis labels
+plt.ylabel('2P signal (a.u.)', fontsize=12)
+plt.xlabel('Repetition rate', fontsize=12)
+plt.xticks(rotation=0, ha='center')
+
+# Modify the x-tick labels with LaTeX formatting for "MHz"
+x_labels = [r'$\mathit{' + label.replace(" MHz", r'\ MHz') + '}$' for label in test_name_pool_label]
+plt.gca().set_xticklabels(x_labels)
+
+plt.tight_layout()
+plt.show()
+
