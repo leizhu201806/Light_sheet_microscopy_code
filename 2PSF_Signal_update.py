@@ -25,6 +25,9 @@ from scipy.optimize import curve_fit
 from scipy import interpolate
 from skimage import io
 from numpy import asarray as ar
+import matplotlib.font_manager as fm
+print([f.name for f in fm.fontManager.ttflist])
+
 # from scipy import exp
 
 
@@ -422,11 +425,11 @@ sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile", palette=c
 # Annotate mean values at the top of the figure
 for i, mean_val in enumerate(reordered_means):
     plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
-             color='black', ha='center', va='bottom', fontsize=10)
+             color='black', ha='center', va='bottom', fontdict={'fontname': 'Calibri', 'fontsize': 14})
 
 # plt.xlabel('Combined Groups')
-plt.ylabel('2P signal (a.u.)',fontsize = 12)
-plt.xlabel('Repetition rate',fontsize = 12)
+plt.ylabel('2P signal (a.u.)', fontdict={'fontname': 'Calibri', 'fontsize': 14})
+plt.xlabel('Repetition rate', fontdict={'fontname': 'Calibri', 'fontsize': 14})
 # plt.title('Violin Plot of Non-zero Intensity Data Grouped by Combined Seperation with Mean Values Marked')
 plt.xticks(rotation=0, ha='center')
 plt.tight_layout()
