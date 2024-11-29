@@ -490,16 +490,16 @@ sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile", palette=c
 # Annotate mean values at the top of each group
 for i, mean_val in enumerate(reordered_means):
     plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
-             color='black', ha='center', va='bottom',  font = 'Calibri',fontsize=12)
+             color='black', ha='center', va='bottom',  font = 'Calibri', fontsize=12)
 
 # Setting axis labels
-plt.ylabel('2P signal (a.u.)', font = 'Calibri',fontsize=12)
-plt.xlabel('Repetition rate', font = 'Calibri' ,fontsize=12)
+plt.ylabel('2P signal (a.u.)', font = 'Calibri',fontsize=14)
+plt.xlabel('Repetition rate', font = 'Calibri' ,fontsize=14)
 plt.xticks(rotation=0, ha='center')
 
 # Modify the x-tick labels with LaTeX formatting for "MHz"
 x_labels = [r'$\mathit{' + label.replace(" MHz", r'\ MHz') + '}$' for label in test_name_pool_label]
-plt.gca().set_xticklabels(x_labels)
+plt.gca().set_xticklabels(x_labels,fontsize=10)
 
 plt.tight_layout()
 plt.show()
