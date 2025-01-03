@@ -224,7 +224,7 @@ plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 
 # Creating the figure and axis
-fig = plt.figure(figsize=(4.8, 3.84))
+fig = plt.figure(figsize=(4.72, 4.21))
 # ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.8])  # Adjusted to give space for labels
 
 # # Box plot for the data distributions
@@ -250,7 +250,7 @@ for i, label in enumerate(test_name_pool):
 
     label = '$\lambda_{illumination}$='+label+'nm'
     if i == 0:
-        y_data_offset = [y - 0.05 if y <= 2.5 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
+        y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
         plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
     if i == 1:
         y_data_offset = [y - 0 for y in y_data]  # Subtract 0.1 from each y_data point
