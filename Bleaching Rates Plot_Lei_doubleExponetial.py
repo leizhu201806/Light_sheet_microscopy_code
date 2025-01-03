@@ -363,6 +363,76 @@ for i, label in enumerate(comparisons):
 ax1.set_ylim([0, 1.4 * max([np.max(points) for points in all_points])])
 
 #%%
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from scipy import stats
+
+# Data preparation
+all_points = [np.array(points_dict['All_' + label + 'points']) for label in test_name_pool]
+order = [0, 1, 2, 3]  # Exclude irrelevant categories
+colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
+
+# Setting up matplotlib parameters
+plt.rcParams['font.size'] = 10
+plt.rcParams['axes.linewidth'] = 2
+
+# Creating the figure and axis
+fig = plt.figure(figsize=(5.0, 3.78))
+ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.8])  # Adjusted to give space for labels
+
+# Violin plot
+sns.violinplot(data=all_points, palette=colors, ax=ax1)
+
+# Setting x-ticks and labels
+ax1.set_xticks(range(len(test_name_pool)))
+# ax1.set_xticklabels(test_name_pool, rotation=0, fontsize=12, ha='center')
+ax1.set_ylabel('Decay (a.u.)', fontsize=12)
+ax1.set_xlabel('Repetition rate', fontsize=12)
+
+# Pairwise comparisons
+comparisons = [("8MHz", "4x2MHz"), ("8MHz", "2x2x2MHz"), ("8MHz", "4MHz")]
+heights = [0.015, 0.035, 0.035]
+for i, label in enumerate(comparisons):
+    group1 = points_dict['All_' + label[0] + 'points']
+    group2 = points_dict['All_' + label[1] + 'points']
+    t_stat, p_val = stats.ttest_ind(group1, group2)
+    
+    # Find y-position for the annotation
+    y_max = max(np.max(group1), np.max(group2))
+    x1, x2 = test_name_pool.index(label[0]), test_name_pool.index(label[1])
+    y, h, col = y_max + heights[i], 0.01, 'k'
+    
+    # Plot the line and annotate p-value
+    ax1.plot([x1, x1, x2, x2], [y, y + h, y + h, y], lw=1.5, color=col)
+    ax1.text((x1 + x2) * 0.5, y + h, f"$p$ = {p_val:.2f}", ha='center', va='bottom', color=col)
+
+# Setting y-axis limit
+ax1.set_ylim([-0.02, 1.4 * max([np.max(points) for points in all_points])])
+# Adding scatter points and mean annotations
+mean_values = []
+median_values = []
+for i, label in enumerate(test_name_pool):
+    key = 'All_' + label + 'points'
+    points = np.array(points_dict[key])
+
+    # Calculate mean and median
+    mean_value = np.mean(points)
+    median_value = np.median(points)
+    
+    mean_values.append(mean_value)
+    median_values.append(median_value)
+# Connect the median values with a line
+ax1.plot(range(len(median_values)), median_values, color='k', linestyle='--', linewidth=1.5, marker='o', markersize=5, label="Median")
+# Modify the x-tick labels with LaTeX formatting for "MHz"
+x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
+plt.gca().set_xticklabels(x_labels, fontsize=10)
+
+
+plt.tight_layout()
+plt.show()
+
+#%%
 from scipy import stats
 test_name_pool = test_name_pool    
 all_points = [np.array(points_dict['All_' + label + 'points']) for label in test_name_pool]
