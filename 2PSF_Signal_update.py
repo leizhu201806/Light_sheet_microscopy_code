@@ -480,7 +480,7 @@ for i, idx in enumerate(order):
 
 # Create a violin plot with the reordered groups
 plt.figure(figsize=(4.8, 3.80))
-plt.rcParams['font.size'] = 10
+plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 
 # Create violin plot
@@ -497,13 +497,13 @@ plt.plot(x_positions, reordered_medians, color='k', linestyle='--', linewidth=1.
     
 plt.ylim(-50, 300)
 # Add labels and formatting
-plt.ylabel('2P signal (a.u.)', fontsize=12)
-plt.xlabel('Repetition rate', fontsize=12)
+plt.ylabel('2P signal (a.u.)', fontsize=14)
+plt.xlabel('Repetition rate', fontsize=14)
 plt.xticks(rotation=0, ha='center')
 
 # Modify the x-tick labels with LaTeX formatting for "MHz"
 x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
-plt.gca().set_xticklabels(x_labels, fontsize=10)
+plt.gca().set_xticklabels(x_labels, fontsize=12)
 
 plt.tight_layout()
 plt.show()

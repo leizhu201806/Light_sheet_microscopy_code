@@ -374,11 +374,11 @@ order = [0, 1, 2, 3]  # Exclude irrelevant categories
 colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 
 # Setting up matplotlib parameters
-plt.rcParams['font.size'] = 10
+plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 
 # Creating the figure and axis
-fig = plt.figure(figsize=(5.0, 3.78))
+fig = plt.figure(figsize=(5.0, 3.73))
 ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.8])  # Adjusted to give space for labels
 
 # Violin plot
@@ -387,8 +387,8 @@ sns.violinplot(data=all_points, palette=colors, ax=ax1)
 # Setting x-ticks and labels
 ax1.set_xticks(range(len(test_name_pool)))
 # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize=12, ha='center')
-ax1.set_ylabel('Decay (a.u.)', fontsize=12)
-ax1.set_xlabel('Repetition rate', fontsize=12)
+ax1.set_ylabel('Decay (a.u.)', fontsize=14)
+ax1.set_xlabel('Repetition rate', fontsize=14)
 
 # Pairwise comparisons
 comparisons = [("8MHz", "4x2MHz"), ("8MHz", "2x2x2MHz"), ("8MHz", "4MHz")]
@@ -426,10 +426,10 @@ for i, label in enumerate(test_name_pool):
 ax1.plot(range(len(median_values)), median_values, color='k', linestyle='--', linewidth=1.5, marker='o', markersize=5, label="Median")
 # Modify the x-tick labels with LaTeX formatting for "MHz"
 x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
-plt.gca().set_xticklabels(x_labels, fontsize=10)
+plt.gca().set_xticklabels(x_labels, fontsize=12)
 
 
-plt.tight_layout()
+# plt.tight_layout()
 plt.show()
 
 #%%
@@ -589,7 +589,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 
-plt.rcParams['figure.figsize'] = [4.7,4.0]
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.linewidth'] = 2
+plt.rcParams['figure.figsize'] = [4.7,3.88]
 plt.figure()
 
 # Order and colors
@@ -622,7 +624,7 @@ for i, label in enumerate(test_name_pool):
     plt.fill_between(np.linspace(1, 75, num_rows) * 0.26, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
 
 plt.xlim((0.01, num_rows * 0.26))
-plt.legend(fontsize=10)
+plt.legend(fontsize=12, frameon=False)
 plt.xlabel('T[s]', fontsize=14)
 plt.ylabel('2P signal (a.u.)', fontsize=14)
 
@@ -631,7 +633,7 @@ ax1 = plt.gca()
 
 # Add zoomed inset
 x1, x2, y1, y2 = 4, 6, 0.30, 0.55
-axins = inset_axes(ax1, width="70%", height="70%", loc='upper right', bbox_to_anchor=(0.25, 0.25, 0.47, 0.47), bbox_transform=ax1.transAxes)
+axins = inset_axes(ax1, width="70%", height="70%", loc='upper left', bbox_to_anchor=(0.25, 0.25, 0.47, 0.47), bbox_transform=ax1.transAxes)
 
 
 for i, label in enumerate(test_name_pool):
