@@ -12,6 +12,7 @@ import csv
 import os
 import pandas as pd
 from scipy import stats
+import seaborn as sns
 
 def read_csv_file(file_path):
     """
@@ -66,6 +67,7 @@ points_dict = {
 # Extract all points for the boxplot
 all_points = [100*np.array(points_dict['slope_' + label]) for label in test_name_pool]
 
+#%%
 # Order and colors
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
@@ -121,36 +123,37 @@ ax1.set_xlabel('Wavelenght (nm)',fontsize = 14)
 
 # Setting y-axis limit
 ax1.set_ylim([6.8, 1.05 * max([np.max(points) for points in all_points])])
+#%%
+order = [0, 1]
+colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
+# Setting up matplotlib parameters
+plt.rcParams['font.size'] = 10
+plt.rcParams['axes.linewidth'] = 2
 
-# # Pairwise comparisons
-# comparisons = [("8MHz", "4x2MHz"), ("8MHz", "2x2x2MHz"), ("8MHz", "4MHz")]
-# Height = [0.005,0.026,0.03]
+# Creating the figure and axis
+fig = plt.figure(figsize=(4.72, 4))
 
-# for i, label in enumerate(comparisons):
-#     group1 = points_dict['All_' + label[0] + 'points']
-#     group2 = points_dict['All_' + label[1] + 'points']
-#     t_stat, p_val = stats.ttest_ind(group1, group2)
+sns.violinplot(data=all_points, inner="quart", palette=colors)
+# Calculate and annotate mean values
+for i, points in enumerate(all_points):
+    mean_value = np.mean(points)
+    # Annotate the mean value on the plot
+    plt.text(i, mean_value, f'$\hat{{\mu}}$ ={mean_value:.2f}', color='white', ha='center', va='bottom')
+    plt.text(i, 3.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')
     
-#     # Find y-position for the annotation
-#     y_max = max(np.max(group1), np.max(group2))
-#     x1, x2 = test_name_pool.index(label[0]), test_name_pool.index(label[1])
-#     y, h, col = y_max + Height[i], 0.01, 'k'
-    
-#     # Plot the line and annotate p-value
-#     ax1.plot([x1, x1, x2, x2], [y, y + h, y + h, y], lw=1.5, color=col)
-#     ax1.text((x1 + x2) * 0.5, y + h, f"$p$ = {p_val:.3f}", ha='center', va='bottom', color=col)
-# # Setting y-axis limit
-# ax1.set_ylim([0, 1.5 * max([np.max(points) for points in all_points])])
-# # # Setting x-ticks and labels
-# # ax1.set_xticks(range(len(test_name_pool)))
-# # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize=12, ha='center')
-# # ax1.set_title("Bleaching Rates", fontsize=16)
-# # ax1.set_ylabel('Decay (a.u.)', fontsize=14)
+# Set the x-tick labels and other plot settings
+plt.xticks(ticks=np.arange(len(test_name_pool)), labels=test_name_pool, rotation=0, fontsize=10)
+plt.ylabel(r'$\Delta$HBR/HBR$_0$ in %', fontsize=12)
+plt.xlabel('Wavelength (nm)', fontsize=12)
 
-# # # Setting y-axis limit
-# # ax1.set_ylim([0, 1.1 * max([np.max(points) for points in all_points])])
+# Display the plot
+plt.tight_layout()
+plt.show()
 
-# # plt.show()
+fig = plt.gcf()  # Get current figure
+fig_size = fig.get_size_inches()  # Get figure size in inches
+print(f"Current figure size: {fig_size} inches")
+
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
@@ -221,7 +224,7 @@ plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 
 # Creating the figure and axis
-fig = plt.figure(figsize=(10, 5))
+fig = plt.figure(figsize=(4.8, 3.84))
 # ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.8])  # Adjusted to give space for labels
 
 # # Box plot for the data distributions
@@ -244,8 +247,14 @@ for i, label in enumerate(test_name_pool):
         value = list(point.values())[0]  # Extract the single value
         x_data.append(float(key))
         y_data.append(float(value))
+
     label = '$\lambda_{illumination}$='+label+'nm'
-    plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data, ':',linewidth = 4,color=colors[i],label=label)
+    if i == 0:
+        y_data_offset = [y - 0.05 if y <= 2.5 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
+    if i == 1:
+        y_data_offset = [y - 0 for y in y_data]  # Subtract 0.1 from each y_data point
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
     # Scatter plot for individual points
     # x_vals = np.full(points.shape, i)+ np.random.uniform(-0.1, 0.1, size=len(points))  # small random jitter  # Create an array of the same value i, for x positions
     
@@ -260,9 +269,13 @@ for i, label in enumerate(test_name_pool):
     # ax1.text(i, mean_value, f'$\\hat{{\\mu}}_{{mean}}$ = {mean_value:.3f}', color='k', ha='right', va='bottom')
 
     # ax1.text(i, mean_value + std_value, f'$\hat{{\n}}$ ={points.shape:.2f}', color='k', ha='left', va='bottom')
-plt.ylabel('HBR(Hz)', fontsize=14)
-plt.xlabel('T[s] ',fontsize=14)  # X-axis label
+plt.ylabel('HBR(Hz)', fontsize=12)
+plt.xlabel('T[s] ',fontsize=12)  # X-axis label
 plt.legend(fontsize=10)  # Show legend
+fig = plt.gcf()  # Get current figure
+fig_size = fig.get_size_inches()  # Get figure size in inches
+print(f"Current figure size: {fig_size} inches")
+
 # # Setting x-ticks and labels
 # ax1.set_xticks(range(len(test_name_pool)))
 # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize = 12,ha='center')
