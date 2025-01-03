@@ -465,37 +465,49 @@ plt.show()
 order = [0, 1, 4, 3, 5]  # Exclude the index corresponding to 10MHz
 reordered_labels = []
 reordered_data = []
-reordered_means = []
+reordered_medians = []
 colors = plt.cm.tab20(np.linspace(0, 0.36, 6))
+
 # Adjust the test_name_pool to exclude "10MHz"
 test_name_pool = ['2MHz', '4MHz', '2x2MHz', '8MHz', '2x2x2MHz']
 
+# Calculate medians for each group
 for i, idx in enumerate(order):
     label = test_name_pool[i]
     reordered_labels.extend([label] * len(group_data_list[idx]))
     reordered_data.extend(group_data_list[idx])
-    reordered_means.append(group_means[idx])
+    reordered_medians.append(np.median(group_data_list[idx]))  # Calculate median
 
 # Create a violin plot with the reordered groups
-plt.figure(figsize=(4.8, 3.87))
+plt.figure(figsize=(4.8, 3.80))
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 
 # Create violin plot
-sns.violinplot(x=reordered_labels, y=reordered_data, inner="quartile", palette=colors[1:])
+sns.violinplot(x=reordered_labels, y=reordered_data, palette=colors[1:])
 
-# Annotate mean values at the top of the figure
-for i, mean_val in enumerate(reordered_means):
-    plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
-             color='black', ha='center', va='bottom', fontsize=10)
+# for i, mean_val in enumerate(reordered_means):
+#     plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
+#              color='black', ha='center', va='bottom', fontsize=10)
 
+# Connect the median values with a line
+x_positions = range(len(reordered_medians))  # x-coordinates for the groups
+plt.plot(x_positions, reordered_medians, color='k', linestyle='--', linewidth=1.5, marker='o', markersize=5, label="Median")
+
+    
+plt.ylim(-50, 300)
+# Add labels and formatting
 plt.ylabel('2P signal (a.u.)', fontsize=12)
 plt.xlabel('Repetition rate', fontsize=12)
 plt.xticks(rotation=0, ha='center')
-plt.tight_layout()
 
-# Display the plot
+# Modify the x-tick labels with LaTeX formatting for "MHz"
+x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
+plt.gca().set_xticklabels(x_labels, fontsize=10)
+
+plt.tight_layout()
 plt.show()
+
 
 #%%
 import matplotlib.pyplot as plt
