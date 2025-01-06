@@ -131,7 +131,7 @@ plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 
 # Creating the figure and axis
-fig = plt.figure(figsize=(4.72, 4))
+fig = plt.figure(figsize=(4.72, 4.03))
 
 sns.violinplot(data=all_points, inner="quart", palette=colors)
 # Calculate and annotate mean values
@@ -144,7 +144,7 @@ for i, points in enumerate(all_points):
 # Set the x-tick labels and other plot settings
 plt.xticks(ticks=np.arange(len(test_name_pool)), labels=test_name_pool, rotation=0, fontsize=10)
 plt.ylabel(r'$\Delta$HBR/HBR$_0$ in %', fontsize=12)
-plt.xlabel('Wavelength (nm)', fontsize=12)
+plt.xlabel(r'Wavelength ($nm$)', fontsize=12)
 
 # Display the plot
 plt.tight_layout()
@@ -248,7 +248,7 @@ for i, label in enumerate(test_name_pool):
         x_data.append(float(key))
         y_data.append(float(value))
 
-    label = '$\lambda_{illumination}$='+label+'nm'
+    label = '$\lambda_{illu.}$='+label+' $nm$'
     if i == 0:
         y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
         plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
@@ -275,7 +275,7 @@ plt.legend(fontsize=10)  # Show legend
 fig = plt.gcf()  # Get current figure
 fig_size = fig.get_size_inches()  # Get figure size in inches
 print(f"Current figure size: {fig_size} inches")
-
+plt.xlim([0,125])
 # # Setting x-ticks and labels
 # ax1.set_xticks(range(len(test_name_pool)))
 # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize = 12,ha='center')

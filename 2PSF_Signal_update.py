@@ -479,7 +479,7 @@ for i, idx in enumerate(order):
     reordered_medians.append(np.median(group_data_list[idx]))  # Calculate median
 
 # Create a violin plot with the reordered groups
-plt.figure(figsize=(4.8, 3.80))
+plt.figure(figsize=(4.8, 3.9))
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 
