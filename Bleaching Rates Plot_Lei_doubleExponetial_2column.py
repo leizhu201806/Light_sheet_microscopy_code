@@ -591,7 +591,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
-plt.rcParams['figure.figsize'] = [4.7,3.88]
+plt.rcParams['figure.figsize'] = [5.0,3.88]
 plt.figure()
 
 # Order and colors
