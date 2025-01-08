@@ -100,8 +100,17 @@ plt.grid(True, which='both')
 plt.show()
 
 # Load mCherry spectrum
-Table = pd.read_csv('FPbase_Spectra_mCherry.csv')
-Table["Absorption"] = Table.iloc[:, 1].str.replace(",", ".").astype(float) / 0.4101
+# Table = pd.read_csv('FPbase_Spectra_mCherry.csv')
+Table = loadmat('FPbase_Spectra_mCherry.mat')
+# Ensure the column is treated as a string before applying string operations
+# Table["mCherryAbs"] = (
+#     Table.iloc[0:615, 0]
+#     .astype(str)  # Convert to string
+#     .str.replace(",", ".", regex=False)  # Replace comma with dot
+#     .astype(float)  # Convert back to float
+#     / 0.4101  # Apply scaling
+# )
+
 mCherryAbs = Table[[Table.columns[0], "Absorption"]].to_numpy()
 mCherryAbsi = []
 
