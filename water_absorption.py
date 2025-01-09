@@ -134,7 +134,7 @@ fig, ax1 = plt.subplots(figsize=(8, 5))
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 ax1.plot(lambda_vals, mCherryAbsi, '-', linewidth=2, label='mCherry Absorption', color='red')
-ax1.set_xlabel('Wavelength (nm)', fontsize=14)
+ax1.set_xlabel(r'Wavelength ($nm$)', fontsize=14)
 ax1.set_ylabel('mCherry Absorption (a.u.)', fontsize=14, color='red')
 ax1.tick_params(axis='y', labelcolor='red')
 
