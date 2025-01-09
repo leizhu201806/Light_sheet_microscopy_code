@@ -13,7 +13,7 @@ import pandas as pd
 # WaterAbs should be a 2D array where column 0 is wavelengths and column 1 is absorption
 from scipy.io import loadmat
 
-mat_data = loadmat('WaterAbs.mat')
+mat_data = loadmat('D:\\Light_sheet_code\WaterAbs.mat')
 WaterAbs = mat_data['WaterAbs']  # Replace 'WaterAbs' with the actual key in the .mat file
 
 
@@ -101,29 +101,16 @@ plt.show()
 
 # Load mCherry spectrum
 # Table = pd.read_csv('FPbase_Spectra_mCherry.csv')
-Table = loadmat('FPbase_Spectra_mCherry.mat')
+Table = loadmat('mCherryAbsi.mat')
 # Ensure the column is treated as a string before applying string operations
-# Table["mCherryAbs"] = (
-#     Table.iloc[0:615, 0]
-#     .astype(str)  # Convert to string
-#     .str.replace(",", ".", regex=False)  # Replace comma with dot
-#     .astype(float)  # Convert back to float
-#     / 0.4101  # Apply scaling
-# )
-
-mCherryAbs = Table[[Table.columns[0], "Absorption"]].to_numpy()
-mCherryAbsi = []
-
-for l in lambda_vals:
-    idx = np.argmin(np.abs(mCherryAbs[:, 0] - l))
-    mCherryAbsi.append(mCherryAbs[idx, 1])
-mCherryAbsi = np.array(mCherryAbsi)
+mCherryAbsi = np.squeeze(Table["mCherryAbsi"])
 
 # Signal enhancement
 plt.figure(5)
 tau = 300
 T_opt = tau / tau_0 * T_0 * (2.8 * Plimit / PNL_0)**(-nNL / (nNL - 1))
-SignalEnhancement = (T_opt / T_0) * (Plimit / P_0)**2 * (tau_0 / tau) * mCherryAbsi
+SignalEnhancement = np.squeeze((T_opt / T_0) * (Plimit / P_0)**2 * (tau_0 / tau) * mCherryAbsi)
+
 plt.plot(lambda_vals, SignalEnhancement, '-', linewidth=4)
 plt.axvline(1030, color=[0.5, 0.5, 0.5], linewidth=4)
 plt.axhline(SignalEnhancement[np.where(lambda_vals == 1030)[0][0]], color=[0.5, 0.5, 0.5], linewidth=4)
@@ -131,4 +118,37 @@ plt.axis([900, 1150, 0, 30])
 plt.xlabel('Wavelength in nm', fontsize=18, fontweight='bold')
 plt.ylabel('2PEF enhancement (mCherry)', fontsize=18, fontweight='bold')
 plt.grid(True, which='both')
+plt.show()
+
+
+plt.figure(figsize=(6, 6))
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.linewidth'] = 2
+plt.plot(lambda_vals, mCherryAbsi, '-', linewidth=4)
+plt.plot(lambda_vals, WaterAbsi, 'o', linewidth=4, label='Interpolated Data')
+
+#%% Create a figure
+# Plot mCherryAbsi on the primary y-axis
+
+fig, ax1 = plt.subplots(figsize=(8, 5))
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.linewidth'] = 2
+ax1.plot(lambda_vals, mCherryAbsi, '-', linewidth=2, label='mCherry Absorption', color='red')
+ax1.set_xlabel('Wavelength (nm)', fontsize=14)
+ax1.set_ylabel('mCherry Absorption (a.u.)', fontsize=14, color='red')
+ax1.tick_params(axis='y', labelcolor='red')
+
+# Add the secondary y-axis for WaterAbsi
+ax2 = ax1.twinx()
+ax2.plot(lambda_vals, WaterAbsi, '--', linewidth=2, label='Water Absorption', color='blue')
+ax2.set_ylabel('Water Absorption (a.u.)', fontsize=14, color='blue')
+ax2.tick_params(axis='y', labelcolor='blue')
+
+# # Optional: Add a legend
+# fig.legend(loc='upper right', bbox_to_anchor=(0.4, 1.0), bbox_transform=ax1.transAxes)
+
+# Show the plot
+# plt.title('Absorption vs Wavelength')
+plt.grid(True)
+plt.tight_layout()
 plt.show()
