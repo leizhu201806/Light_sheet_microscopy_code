@@ -150,5 +150,6 @@ ax2.tick_params(axis='y', labelcolor='blue')
 # Show the plot
 # plt.title('Absorption vs Wavelength')
 plt.grid(True)
+plt.xlim([900,1200])
 plt.tight_layout()
 plt.show()
