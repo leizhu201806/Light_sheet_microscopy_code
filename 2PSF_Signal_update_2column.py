@@ -429,7 +429,7 @@ for i,idx in enumerate(order):
     label = test_name_pool[i]
     reordered_labels.extend([label] * len(group_data_list[idx]))
     reordered_data.extend(group_data_list[idx])
-    reordered_means.append(group_means[idx])
+    reordered_means.append(np.mean(group_means[idx]))
 
 # Create a violin plot with the reordered groups
 
@@ -462,21 +462,32 @@ plt.tight_layout()
 plt.show()
 #%%
 # Exclude "10MHz" data from the order and labels
-order = [0, 1, 4, 3, 5]  # Exclude the index corresponding to 10MHz
+# Main_name_pool = ['2MHz','4MHz','8MHz','10MHz','BS_2MHz','BS_4MHz']
+order = [2, 5, 4, 1]  # Exclude the index corresponding to 10MHz
 reordered_labels = []
 reordered_data = []
 reordered_medians = []
-colors = plt.cm.tab20(np.linspace(0, 0.36, 6))
+reordered_means = []
+
+# Generate the color palette
+colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
+
+# Remodify color order according to the desired order
+remodified_colors = colors[[0,2,1,3]]  # Change the order indices as needed
+
+# Use the remodified color order
+colors1 = remodified_colors
 
 # Adjust the test_name_pool to exclude "10MHz"
-test_name_pool = ['2MHz', '4MHz', '2x2MHz', '8MHz', '2x2x2MHz']
-
+# test_name_pool = ['2MHz', '4MHz', '2x2MHz', '8MHz', '2x2x2MHz']
+test_name_pool = ['8MHz', '2x2x2MHz','2x2MHz','4MHz']
 # Calculate medians for each group
 for i, idx in enumerate(order):
     label = test_name_pool[i]
     reordered_labels.extend([label] * len(group_data_list[idx]))
     reordered_data.extend(group_data_list[idx])
     reordered_medians.append(np.median(group_data_list[idx]))  # Calculate median
+    reordered_means.append(np.mean(group_means[idx]))
 
 # Create a violin plot with the reordered groups
 plt.figure(figsize=(5.05, 3.9))
@@ -484,11 +495,11 @@ plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 
 # Create violin plot
-sns.violinplot(x=reordered_labels, y=reordered_data, palette=colors[1:])
+sns.violinplot(x=reordered_labels, y=reordered_data, palette=colors1)
 
-# for i, mean_val in enumerate(reordered_means):
-#     plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'{mean_val:.2f}', 
-#              color='black', ha='center', va='bottom', fontsize=10)
+for i, mean_val in enumerate(reordered_means):
+    plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'$\hat{{\mu}}$ ={mean_val:.1f}', 
+              color='black', ha='center', va='bottom', fontsize=12)
 
 # Connect the median values with a line
 x_positions = range(len(reordered_medians))  # x-coordinates for the groups

@@ -78,11 +78,11 @@ plt.rcParams['axes.linewidth'] = 2
 plt.plot(1 / T, PNL1, 'k-.', linewidth=2, label=r'Maioli 2020 Scaling law @ 1030 $nm$')
 plt.plot([1, 80], [115, 115], '--', linewidth=2, color=[0.5, 0.5, 0.5], label='Thermal effect threshold')
 
-plt.plot(dataf[k1], dataPNL[k1], 'ko', linewidth=2, markersize=8, label= r'No splitting @ 1030 $nm$')
+plt.plot(dataf[k1], dataPNL[k1], 'k*', linewidth=2, markersize=8, label= r'No splitting @ 1030 $nm$')
 plt.plot(dataf[k2], dataPNL[k2], 'o', color=[1, 0.5, 0], linewidth=2, markersize=8, label= r'2x splitting @ 1030 $nm$ (10 and 20 $mm$)')
-plt.plot(dataf[k3], dataPNL[k3], 'o', color=[0, 0, 1], linewidth=2, markersize=8, label=r'2x2x splitting @ 1030 $nm$')
-plt.plot(dataf[k4], dataPNL[k4], 'kx', linewidth=2, markersize=12, label=r'No splitting @ 1070 $nm$')
-plt.plot(dataf[k5], dataPNL[k5], 'x', color=[1, 0.5, 0], linewidth=2, markersize=12, label=r'2x splitting @ 1070 $nm$')
+plt.plot(dataf[k3], dataPNL[k3], '^', color=[0, 0, 1], linewidth=2, markersize=8, label=r'2x2x splitting @ 1030 $nm$')
+plt.plot(dataf[k4], dataPNL[k4], 'k<', linewidth=2, markersize=12, label=r'No splitting @ 1070 $nm$')
+plt.plot(dataf[k5], dataPNL[k5], 'k>', color=[1, 0.5, 0], linewidth=2, markersize=12, label=r'2x splitting @ 1070 $nm$')
 
 plt.ylabel(r'$P_{NL}$ ($mW$) at sample', fontsize=14)
 plt.xlabel(r'Repetition rate ($MHz$)', fontsize=14)

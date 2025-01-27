@@ -126,6 +126,8 @@ ax1.set_ylim([6.8, 1.05 * max([np.max(points) for points in all_points])])
 #%%
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
+colors = colors[::-1]  # Reversing the color order
+
 # Setting up matplotlib parameters
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
@@ -138,8 +140,12 @@ sns.violinplot(data=all_points, inner="quart", palette=colors)
 for i, points in enumerate(all_points):
     mean_value = np.mean(points)
     # Annotate the mean value on the plot
-    plt.text(i, mean_value, f'$\hat{{\mu}}$ ={mean_value:.2f}', color='white', ha='center', va='bottom')
-    plt.text(i, 3.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')
+    if i ==0:
+        plt.text(i, 8.5, f'$\hat{{\mu}}$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
+        plt.text(i, 7.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')
+    if i ==1:  
+        plt.text(i, 21.5, f'$\hat{{\mu}}$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
+        plt.text(i, 20.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')       
     
 # Set the x-tick labels and other plot settings
 plt.xticks(ticks=np.arange(len(test_name_pool)), labels=test_name_pool, rotation=0, fontsize=10)
@@ -218,13 +224,13 @@ all_points = [np.array(points_dict['profile_' + label]) for label in test_name_p
 # Order and colors
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
-
+colors = colors[::-1]
 # Setting up matplotlib parameters
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
 
 # Creating the figure and axis
-fig = plt.figure(figsize=(4.72, 4.21))
+fig = plt.figure(figsize=(4.87, 4.21))
 # ax1 = fig.add_axes([0.15, 0.15, 0.8, 0.8])  # Adjusted to give space for labels
 
 # # Box plot for the data distributions
@@ -250,11 +256,11 @@ for i, label in enumerate(test_name_pool):
 
     label = '$\lambda_{illu.}$='+label+' $nm$'
     if i == 0:
-        y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
+        y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.15 for y in y_data]  # Subtract 0.1 from each y_data point
         plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
     if i == 1:
         y_data_offset = [y - 0 for y in y_data]  # Subtract 0.1 from each y_data point
-        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, '^',linewidth = 4,color=colors[i],label=label)
     # Scatter plot for individual points
     # x_vals = np.full(points.shape, i)+ np.random.uniform(-0.1, 0.1, size=len(points))  # small random jitter  # Create an array of the same value i, for x positions
     
