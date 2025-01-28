@@ -126,7 +126,7 @@ for index_file, test_name in enumerate(test_name_pool):
         # thresh = cv2.threshold(img_arr[0], 120, 255, cv2.THRESH_BINARY)[1]
 
         # Create a map of the initial slopes m*t
-        xs = np.linspace(0, img_arr.shape[0] - 1, img_arr.shape[0])
+        xs = 1*np.linspace(0, img_arr.shape[0] - 1, img_arr.shape[0])
         t_arr = np.zeros((img_arr.shape[2], img_arr.shape[1]))
         mt_arr = np.zeros((img_arr.shape[2], img_arr.shape[1]))
         err_arr = np.zeros((img_arr.shape[2], img_arr.shape[1]))
@@ -367,10 +367,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from scipy import stats
-
+test_name_pool = ['4MHz','2x2x2MHz','4x2MHz','8MHz']
+# test_name_pool = ['8MHz','4x2MHz','2x2x2MHz','4MHz']
 # Data preparation
 all_points = [np.array(points_dict['All_' + label + 'points']) for label in test_name_pool]
+
 order = [0, 1, 2, 3]  # Exclude irrelevant categories
+# order = [3, 2, 1, 0]  # Exclude irrelevant categories
 colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 
 # Setting up matplotlib parameters
@@ -387,8 +390,8 @@ sns.violinplot(data=all_points, palette=colors, ax=ax1)
 # Setting x-ticks and labels
 ax1.set_xticks(range(len(test_name_pool)))
 # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize=12, ha='center')
-ax1.set_ylabel('Decay (a.u.)', fontsize=14)
-ax1.set_xlabel('Repetition rate', fontsize=14)
+ax1.set_ylabel(r'Photobleaching rate $k$', fontsize=14)
+ax1.set_xlabel('Laser frequency', fontsize=14)
 
 # Pairwise comparisons
 comparisons = [("8MHz", "4x2MHz"), ("8MHz", "2x2x2MHz"), ("8MHz", "4MHz")]
@@ -408,7 +411,8 @@ for i, label in enumerate(comparisons):
     ax1.text((x1 + x2) * 0.5, y + h, f"$p$ = {p_val:.2f}", ha='center', va='bottom', color=col)
 
 # Setting y-axis limit
-ax1.set_ylim([-0.02, 1.4 * max([np.max(points) for points in all_points])])
+ax1.set_ylim([-0.03, 1.4 * max([np.max(points) for points in all_points])])
+# ax1.set_ylim([-0.002, 0.008])
 # Adding scatter points and mean annotations
 mean_values = []
 median_values = []
@@ -536,6 +540,7 @@ plt.figure()
 order = [0, 1, 2, 3]
 # colors = plt.cm.tab20(np.linspace(0, 0.2, len(order)))
 test_name_pool = ['8MHz','4x2MHz','2x2x2MHz','4MHz']
+
 num_rows = 75
 # Order and colors
 
@@ -591,14 +596,15 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
-plt.rcParams['figure.figsize'] = [5.0,3.88]
+plt.rcParams['figure.figsize'] = [5.2,3.88]
 plt.figure()
-
+factor = 40
 # Order and colors
 order = [0, 1, 2, 3]
 colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 
-test_name_pool = ['8MHz', '4x2MHz', '2x2x2MHz', '4MHz']
+# test_name_pool = ['8MHz', '4x2MHz', '2x2x2MHz', '4MHz']
+test_name_pool = ['4MHz','2x2x2MHz','4x2MHz','8MHz']
 num_rows = 75
 
 for i, label in enumerate(test_name_pool):
@@ -620,19 +626,19 @@ for i, label in enumerate(test_name_pool):
     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
     
     # Plotting error bars with specified colors
-    plt.errorbar(np.linspace(1, num_rows, num_rows) * 0.26, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=label)
-    plt.fill_between(np.linspace(1, 75, num_rows) * 0.26, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
+    plt.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=label)
+    plt.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
 
-plt.xlim((0.01, num_rows * 0.26))
+plt.xlim((0.01, num_rows * factor))
 plt.legend(fontsize=12, frameon=False)
-plt.xlabel('T[s]', fontsize=14)
+plt.xlabel('Image number', fontsize=14)
 plt.ylabel('2P signal (a.u.)', fontsize=14)
 
 # Create a secondary x-axis for the second row of labels
 ax1 = plt.gca()
 
 # Add zoomed inset
-x1, x2, y1, y2 = 4, 6, 0.30, 0.55
+x1, x2, y1, y2 = 3*4*factor, 3*7*factor, 0.30, 0.55
 axins = inset_axes(ax1, width="70%", height="70%", loc='upper left', bbox_to_anchor=(0.25, 0.25, 0.47, 0.47), bbox_transform=ax1.transAxes)
 
 
@@ -652,8 +658,8 @@ for i, label in enumerate(test_name_pool):
     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
     
     # Plotting error bars with specified colors
-    axins.errorbar(np.linspace(1, num_rows, num_rows) * 0.26, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]])
-    axins.fill_between(np.linspace(1, 75, num_rows) * 0.26, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
+    axins.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]])
+    axins.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
 
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)

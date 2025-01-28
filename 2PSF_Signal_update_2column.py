@@ -463,7 +463,7 @@ plt.show()
 #%%
 # Exclude "10MHz" data from the order and labels
 # Main_name_pool = ['2MHz','4MHz','8MHz','10MHz','BS_2MHz','BS_4MHz']
-order = [2, 5, 4, 1]  # Exclude the index corresponding to 10MHz
+order = [1, 4, 5, 2]  # Exclude the index corresponding to 10MHz
 reordered_labels = []
 reordered_data = []
 reordered_medians = []
@@ -474,13 +474,13 @@ colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 
 # Remodify color order according to the desired order
 remodified_colors = colors[[0,2,1,3]]  # Change the order indices as needed
-
+remodified_colors[[1]] = [0.54117647, 0.54117647 , 0.54117647, 1.       ]
 # Use the remodified color order
 colors1 = remodified_colors
-
 # Adjust the test_name_pool to exclude "10MHz"
 # test_name_pool = ['2MHz', '4MHz', '2x2MHz', '8MHz', '2x2x2MHz']
-test_name_pool = ['8MHz', '2x2x2MHz','2x2MHz','4MHz']
+# test_name_pool = ['8MHz', '2x2x2MHz','2x2MHz','4MHz']
+test_name_pool = ['4MHz','2x2MHz','2x2x2MHz','8MHz']
 # Calculate medians for each group
 for i, idx in enumerate(order):
     label = test_name_pool[i]
@@ -509,7 +509,7 @@ plt.plot(x_positions, reordered_medians, color='k', linestyle='--', linewidth=1.
 plt.ylim(-50, 500)
 # Add labels and formatting
 plt.ylabel('2P signal (a.u.)', fontsize=14)
-plt.xlabel('Repetition rate', fontsize=14)
+plt.xlabel('Laser frequency', fontsize=14)
 plt.xticks(rotation=0, ha='center')
 
 # Modify the x-tick labels with LaTeX formatting for "MHz"

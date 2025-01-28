@@ -260,7 +260,7 @@ for i, label in enumerate(test_name_pool):
         plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
     if i == 1:
         y_data_offset = [y - 0 for y in y_data]  # Subtract 0.1 from each y_data point
-        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, '^',linewidth = 4,color=colors[i],label=label)
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, '--',linewidth = 4,color=colors[i],label=label)
     # Scatter plot for individual points
     # x_vals = np.full(points.shape, i)+ np.random.uniform(-0.1, 0.1, size=len(points))  # small random jitter  # Create an array of the same value i, for x positions
     

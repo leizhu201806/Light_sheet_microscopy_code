@@ -85,7 +85,7 @@ plt.plot(dataf[k4], dataPNL[k4], 'k<', linewidth=2, markersize=12, label=r'No sp
 plt.plot(dataf[k5], dataPNL[k5], 'k>', color=[1, 0.5, 0], linewidth=2, markersize=12, label=r'2x splitting @ 1070 $nm$')
 
 plt.ylabel(r'$P_{NL}$ ($mW$) at sample', fontsize=14)
-plt.xlabel(r'Repetition rate ($MHz$)', fontsize=14)
+plt.xlabel(r'Laser frequency ($MHz$)', fontsize=14)
 plt.xscale('log')
 plt.yscale('log')
 plt.grid(True, which='both', linestyle='--', alpha=0.6)
