@@ -212,7 +212,7 @@ for index_file, test_name in enumerate(test_name_pool):
                             # plt.plot(y_pred)
                             # plt.figure()
                             # plt.imshow(labelMask)
-                            allpoints.append(t)
+                            allpoints.append(t/40)
                             inetn_allpoints.append(np.mean(cell_img_arr,axis = 1)-100)
                     except:
                         pass
@@ -393,9 +393,16 @@ ax1.set_xticks(range(len(test_name_pool)))
 ax1.set_ylabel(r'Photobleaching rate $k$', fontsize=14)
 ax1.set_xlabel('Laser frequency', fontsize=14)
 
+import matplotlib.ticker as mticker
+
+# Scale y-axis values by 10³
+ax1.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{x * 1e3:.1f}"))
+
+# Update y-axis label to include 10⁻³ as a factor
+ax1.set_ylabel(r'Photobleaching rate $k$ ($\times 10^{-3}$)', fontsize=14)
 # Pairwise comparisons
 comparisons = [("8MHz", "4x2MHz"), ("8MHz", "2x2x2MHz"), ("8MHz", "4MHz")]
-heights = [0.015, 0.035, 0.035]
+heights = [0.0006, 0.00105, 0.00095]
 for i, label in enumerate(comparisons):
     group1 = points_dict['All_' + label[0] + 'points']
     group2 = points_dict['All_' + label[1] + 'points']
@@ -404,14 +411,14 @@ for i, label in enumerate(comparisons):
     # Find y-position for the annotation
     y_max = max(np.max(group1), np.max(group2))
     x1, x2 = test_name_pool.index(label[0]), test_name_pool.index(label[1])
-    y, h, col = y_max + heights[i], 0.01, 'k'
+    y, h, col = y_max + heights[i], 0.0001, 'k'
     
     # Plot the line and annotate p-value
     ax1.plot([x1, x1, x2, x2], [y, y + h, y + h, y], lw=1.5, color=col)
     ax1.text((x1 + x2) * 0.5, y + h, f"$p$ = {p_val:.2f}", ha='center', va='bottom', color=col)
 
 # Setting y-axis limit
-ax1.set_ylim([-0.03, 1.4 * max([np.max(points) for points in all_points])])
+ax1.set_ylim([-0.001, 1.4 * max([np.max(points) for points in all_points])])
 # ax1.set_ylim([-0.002, 0.008])
 # Adding scatter points and mean annotations
 mean_values = []
