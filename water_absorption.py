@@ -129,18 +129,20 @@ plt.plot(lambda_vals, WaterAbsi, 'o', linewidth=4, label='Interpolated Data')
 
 #%% Create a figure
 # Plot mCherryAbsi on the primary y-axis
-
+colors = plt.cm.tab20(np.linspace(0, 0.1, 2))
 fig, ax1 = plt.subplots(figsize=(8, 5))
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 ax1.plot(lambda_vals, mCherryAbsi, '-', linewidth=2, label='mCherry Absorption', color='red')
+ax1.axvline(x=1030, linestyle='--',linewidth=2, color=colors[1])
 ax1.set_xlabel(r'Wavelength ($nm$)', fontsize=14)
 ax1.set_ylabel('mCherry Absorption (a.u.)', fontsize=14, color='red')
 ax1.tick_params(axis='y', labelcolor='red')
 
 # Add the secondary y-axis for WaterAbsi
 ax2 = ax1.twinx()
-ax2.plot(lambda_vals, WaterAbsi, '--', linewidth=2, label='Water Absorption', color='blue')
+ax2.plot(lambda_vals, WaterAbsi/wa_1030, '--', linewidth=2, label='Water Absorption', color='blue')
+ax2.axvline(x=1070,linestyle='--', linewidth=2,color=colors[0])
 ax2.set_ylabel('Water Absorption (a.u.)', fontsize=14, color='blue')
 ax2.tick_params(axis='y', labelcolor='blue')
 

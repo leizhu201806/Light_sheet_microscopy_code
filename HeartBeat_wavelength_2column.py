@@ -219,6 +219,7 @@ all_points = [np.array(points_dict['profile_' + label]) for label in test_name_p
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
 
+colors =colors[::-1]
 # Setting up matplotlib parameters
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
@@ -250,11 +251,11 @@ for i, label in enumerate(test_name_pool):
 
     label = '$\lambda_{illu.}$='+label+' $nm$'
     if i == 0:
-        y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.05 for y in y_data]  # Subtract 0.1 from each y_data point
-        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
+        y_data_offset = [y - 0.05 if y <= 2.4 else y + 0.15 for y in y_data]  # Subtract 0.1 from each y_data point
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4, color=colors[i],label=label)
     if i == 1:
         y_data_offset = [y - 0 for y in y_data]  # Subtract 0.1 from each y_data point
-        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4,color=colors[i],label=label)
+        plt.plot(0.65*np.linspace(1, len(points), len(points)), y_data_offset, ':',linewidth = 4, color=colors[i],label=label)
     # Scatter plot for individual points
     # x_vals = np.full(points.shape, i)+ np.random.uniform(-0.1, 0.1, size=len(points))  # small random jitter  # Create an array of the same value i, for x positions
     
@@ -270,7 +271,7 @@ for i, label in enumerate(test_name_pool):
 
     # ax1.text(i, mean_value + std_value, f'$\hat{{\n}}$ ={points.shape:.2f}', color='k', ha='left', va='bottom')
 plt.ylabel('HBR(Hz)', fontsize=12)
-plt.xlabel('T[s] ',fontsize=12)  # X-axis label
+plt.xlabel('Time[s] ',fontsize=12)  # X-axis label
 plt.legend(fontsize=10)  # Show legend
 fig = plt.gcf()  # Get current figure
 fig_size = fig.get_size_inches()  # Get figure size in inches

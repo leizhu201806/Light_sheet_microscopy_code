@@ -79,7 +79,7 @@ plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
 plt.yticks([1, 2, 3])  # Set specific Y-axis tick values
 # Label the plot
-plt.xlabel('T [s]', fontsize=14)
+plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
 plt.ylabel('100% $\\Delta F/F$', fontsize=12)
 # plt.ylabel('100% ΔF/F', fontsize=12, fontstyle='italic')
