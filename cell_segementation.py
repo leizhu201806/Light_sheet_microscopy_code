@@ -344,7 +344,7 @@ for i, data in enumerate(combined_data):
     # Mark the mean with a black dot
     # ax.scatter(i, mean_value, color='k', s=50, zorder=3)
     # Annotate the mean value and sample count
-    ax.text(i+0.07, y_index1, f'$\hat{{\mu}}$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
+    ax.text(i+0.07, y_index1, f'$\mu$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
     ax.text(i+0.07, y_index2, f'$N$ = {sample_counts[i]:.0f}', color='k', ha='left',va='top', fontsize=12)
 
 # Adjust the layout for better visibility and show the plot

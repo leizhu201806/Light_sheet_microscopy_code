@@ -461,6 +461,7 @@ plt.tight_layout()
 # Display the plot
 plt.show()
 #%%
+from scipy import stats
 # Exclude "10MHz" data from the order and labels
 # Main_name_pool = ['2MHz','4MHz','8MHz','10MHz','BS_2MHz','BS_4MHz']
 order = [1, 4, 5, 2]  # Exclude the index corresponding to 10MHz
@@ -498,12 +499,16 @@ plt.rcParams['axes.linewidth'] = 2
 sns.violinplot(x=reordered_labels, y=reordered_data, palette=colors1)
 
 for i, mean_val in enumerate(reordered_means):
-    plt.text(i, plt.gca().get_ylim()[1] * 1.01, f'$\hat{{\mu}}$ ={mean_val:.1f}', 
+    plt.text(i, plt.gca().get_ylim()[1] * 1.05, f'$\mu$ ={mean_val:.1f}', 
               color='black', ha='center', va='bottom', fontsize=12)
 
 # Connect the median values with a line
 x_positions = range(len(reordered_medians))  # x-coordinates for the groups
 plt.plot(x_positions, reordered_medians, color='k', linestyle='--', linewidth=1.5, marker='o', markersize=5, label="Median")
+
+order = [1, 4, 5, 2]  # Exclude the index corresponding to 10MHz
+comparisons = [("4MHz", "2x2MHz"), ("8MHz", "2x2x2MHz")]
+
 
     
 plt.ylim(-50, 500)
@@ -519,6 +524,41 @@ plt.gca().set_xticklabels(x_labels, fontsize=12)
 plt.tight_layout()
 plt.show()
 
+h = 20
+comparisons = [("4MHz", "2x2MHz"), ("8MHz", "2x2x2MHz")]
+# comparisons = [("8MHz", "2x2x2MHz")]
+for comp in comparisons:
+    label1, label2 = comp
+    idx1 = test_name_pool.index(label1)
+    idx2 = test_name_pool.index(label2)
+    
+    # Extract the data for t-test
+    group1 = np.array(group_data_list[order[idx1]])
+    group2 = np.array(group_data_list[order[idx2]])
+    
+    # Perform t-test
+    t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=False)
+    
+    # Get x positions for annotation
+    # x1, x2 = reordered_labels.index(label1), reordered_labels.index(label2)
+    y_max = max(np.max(group1), np.max(group2)) * 1.1  # Set a reasonable y-max for annotation
+    # x1, x2 = test_name_pool.index(label[0]), test_name_pool.index(label[1])
+    # Annotate p-value on the plot
+    plt.plot([idx1, idx1, idx2, idx2], [y_max, y_max + h, y_max + h, y_max], lw=1.5, color='black')
+    plt.text((idx1 + idx2) / 2, y_max+25, f"$p$ = {p_value:.2f}", ha='center', va='bottom', fontsize=12, color='black')
+
+# Add labels and formatting
+plt.ylim(-50, 500)
+plt.ylabel('2P signal (a.u.)', fontsize=14)
+plt.xlabel('Laser frequency', fontsize=14)
+plt.xticks(rotation=0, ha='center')
+
+# Modify x-tick labels with LaTeX formatting
+x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
+plt.gca().set_xticklabels(x_labels, fontsize=12)
+
+plt.tight_layout()
+plt.show()
 
 #%%
 import matplotlib.pyplot as plt

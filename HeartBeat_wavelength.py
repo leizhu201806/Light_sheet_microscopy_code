@@ -141,10 +141,10 @@ for i, points in enumerate(all_points):
     mean_value = np.mean(points)
     # Annotate the mean value on the plot
     if i ==0:
-        plt.text(i, 8.5, f'$\hat{{\mu}}$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
+        plt.text(i, 8.5, f'$\mu$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
         plt.text(i, 7.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')
     if i ==1:  
-        plt.text(i, 21.5, f'$\hat{{\mu}}$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
+        plt.text(i, 21.5, f'$\mu$ ={mean_value:.1f}', color='k', ha='center', va='bottom')
         plt.text(i, 20.5, f'$N$ = {len(points):.0f}', color='k', ha='center', va='bottom')       
     
 # Set the x-tick labels and other plot settings
