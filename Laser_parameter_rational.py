@@ -62,17 +62,17 @@ colors = plt.cm.tab20(np.linspace(0, 0.1, 2))
 plt.figure(figsize=(6, 5))
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
-plt.plot(1 / T, PNL1, 'ko-', linewidth=2, label=r'$P_{NL}$ $\tau =300fs$')
+plt.plot(1 / T, PNL1, 'k', linewidth=2, label=r'$P_{NL}$ Nonlinear photondamage threshold')
 # plt.plot(1 / T, PNL2, 'ro-', linewidth=2,  label=r'$P_{NL}$ $\tau=150fs$')
-plt.plot(1 / T, PNLlimit1, 'k:', linewidth=2, label=r'$P_{Limit}$ $\tau =300fs$')
+plt.plot(1 / T, PNLlimit1, 'k:', linewidth=2, label=r'$P_{Imaging}$ Optimal imaging power')
 plt.plot(1 / T, PNLlimit1/0.8, 'k:', linewidth=2)
 
 # Fill the region between the two curves
 plt.fill_between(1 / T, PNLlimit1, PNLlimit1 / 0.8, color='gray', alpha=0.1)
 
-plt.plot(10, 75, 'ro',  markersize=10)
+plt.plot(10, 75, 'ko',  markersize=10)
 
-plt.plot(16, 115, 'ro',  markersize=10)
+plt.plot(16, 115, 'ko',  markersize=10)
 
 plt.axhline(y=115, color= colors[0], linestyle='--', linewidth=2, label='Thermal effect threshold @ 1070 nm')
 plt.axhline(y=75, color= colors[1], linestyle='--', linewidth=2, label='Thermal effect threshold @ 1030 nm' )
@@ -83,7 +83,7 @@ plt.grid(True)
 # plt.title('PNL at Sample', fontsize=14)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
-
+plt.xlim([2,18])
 plt.tight_layout()
 plt.show()
 
