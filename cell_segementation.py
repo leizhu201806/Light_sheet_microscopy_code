@@ -169,7 +169,7 @@ flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
 data_files = [os.path.join(flile, 'Z04_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff')]
 data = [imread(f) for f in data_files] [0]
 data1 = np.moveaxis(data, 0, -1)
-data= data1[:,:,100:550:15]
+data= data1[:,:,355:800:15]
 
 imgs = [data[:, :, i] for i in range(data.shape[2])]
 
@@ -215,7 +215,114 @@ for index_frame in index_frame:
             Final_electrons1.append(np.max(cell_data)/9.1-200/9.1)                
  
 plt.figure() 
-plt.plot(Final_electrons1)   
+plt.plot(Final_electrons1) 
+#%%
+model = models.Cellpose(gpu=True, model_type='cyto')
+flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
+# data_files = ['C:\\Users\zhu\Desktop\Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff']
+data_files = [os.path.join(flile, 'Z04_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz27_r1.tiff')]
+data = [imread(f) for f in data_files] [0]
+data1 = np.moveaxis(data, 0, -1)
+data= data1[:,:,355:800:15]
+
+imgs = [data[:, :, i] for i in range(data.shape[2])]
+
+masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+                                         flow_threshold=0.5, do_3D=False)
+
+# nimg = len(imgs)
+# for idx in range(nimg):
+#     maski = masks[idx]
+#     flowi = flows[idx][0]
+
+#     fig = plt.figure(figsize=(12,5))
+#     plot.show_segmentation(fig, imgs[idx], maski, flowi)
+#     plt.tight_layout()
+#     plt.show()
+
+index_frame = range(0,30)  # Selecting frames 8 to 12
+for index_frame in index_frame:
+    
+    labels = measure.label(masks[index_frame], connectivity=2, background=0)  # Label connected regions
+    # plt.figure()
+    # plt.imshow(masks[index_frame])
+    Averaged_electrons = np.zeros([len(np.unique(labels)),1])  # Initialize the result array for each frame
+    for label in np.unique(labels):
+        if label == 0: # Optionally skip background if needed
+            continue
+        # Create a mask for the current label
+        cell_data = []
+        labelMask = np.zeros(masks[index_frame].shape, dtype="uint8")
+        labelMask[labels == label] = 255
+        #
+        # plt.figure()
+        # plt.imshow(labelMask)
+        # Find indices of the current label
+        indices = np.where(labelMask == 255)
+        
+        # Calculate the mean across the third axis of data1 for the selected indices
+        cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
+        
+        Averaged_electrons[label,0] = np.max(cell_data)-200
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
+            Final_electrons1.append(np.max(cell_data)/9.1-200/9.1)                
+ 
+plt.figure() 
+plt.plot(Final_electrons1)     
+
+model = models.Cellpose(gpu=True, model_type='cyto')
+flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
+# data_files = ['C:\\Users\zhu\Desktop\Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff']
+data_files = [os.path.join(flile, 'Z04_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz28_r1.tiff')]
+data = [imread(f) for f in data_files] [0]
+data1 = np.moveaxis(data, 0, -1)
+data= data1[:,:,355:800:15]
+
+imgs = [data[:, :, i] for i in range(data.shape[2])]
+
+masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+                                         flow_threshold=0.5, do_3D=False)
+
+# nimg = len(imgs)
+# for idx in range(nimg):
+#     maski = masks[idx]
+#     flowi = flows[idx][0]
+
+#     fig = plt.figure(figsize=(12,5))
+#     plot.show_segmentation(fig, imgs[idx], maski, flowi)
+#     plt.tight_layout()
+#     plt.show()
+
+index_frame = range(0,30)  # Selecting frames 8 to 12
+for index_frame in index_frame:
+    
+    labels = measure.label(masks[index_frame], connectivity=2, background=0)  # Label connected regions
+    # plt.figure()
+    # plt.imshow(masks[index_frame])
+    Averaged_electrons = np.zeros([len(np.unique(labels)),1])  # Initialize the result array for each frame
+    for label in np.unique(labels):
+        if label == 0: # Optionally skip background if needed
+            continue
+        # Create a mask for the current label
+        cell_data = []
+        labelMask = np.zeros(masks[index_frame].shape, dtype="uint8")
+        labelMask[labels == label] = 255
+        #
+        # plt.figure()
+        # plt.imshow(labelMask)
+        # Find indices of the current label
+        indices = np.where(labelMask == 255)
+        
+        # Calculate the mean across the third axis of data1 for the selected indices
+        cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
+        
+        Averaged_electrons[label,0] = np.max(cell_data)-200
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
+            Final_electrons1.append(np.max(cell_data)/9.1-200/9.1)                
+ 
+plt.figure() 
+plt.plot(Final_electrons1)     
+
 
 #%%
 import seaborn as sns
@@ -245,7 +352,7 @@ flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
 data_files = [os.path.join(flile, 'Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff')]
 data = [imread(f) for f in data_files] [0]
 data1 = np.moveaxis(data, 0, -1)
-data= data1[:,:,355:800:15]
+data= data1[:,:,155:600:15]
 
 imgs = [data[:, :, i] for i in range(data.shape[2])]
 
@@ -286,6 +393,102 @@ for index_frame in index_frame:
  
 plt.figure() 
 plt.plot(cell_data)   
+#%%
+model = models.Cellpose(gpu=True, model_type='cyto')
+flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
+# data_files = ['C:\\Users\zhu\Desktop\Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff']
+data_files = [os.path.join(flile, 'Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz33_r1.tiff')]
+data = [imread(f) for f in data_files] [0]
+data1 = np.moveaxis(data, 0, -1)
+data= data1[:,:,155:600:15]
+
+imgs = [data[:, :, i] for i in range(data.shape[2])]
+
+masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+                                         flow_threshold=0.5, do_3D=False)
+
+index_frame = range(0,30)  # Selecting frames 8 to 12
+# Final_electrons = [] # List to store the final results
+for index_frame in index_frame:
+    
+    labels = measure.label(masks[index_frame], connectivity=2, background=0)  # Label connected regions
+    # plt.figure()
+    # plt.imshow(masks[index_frame])
+    Averaged_electrons = np.zeros([len(np.unique(labels)),1])  # Initialize the result array for each frame
+    for label in np.unique(labels):
+        if label == 0: # Optionally skip background if needed
+            continue
+        # Create a mask for the current label
+        cell_data = []
+        labelMask = np.zeros(masks[index_frame].shape, dtype="uint8")
+        labelMask[labels == label] = 255
+        #
+        # plt.figure()
+        # plt.imshow(labelMask)
+        # Find indices of the current label
+        indices = np.where(labelMask == 255)
+        
+        # Calculate the mean across the third axis of data1 for the selected indices
+        cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
+        # cell_data = data1[indices[0], indices[1],:]
+        
+        Averaged_electrons[label,0] = np.max(cell_data)-200
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
+            Final_electrons.append(np.max(cell_data)/9.1-200/9.1)   
+
+        # if np.size(indices[0])>=80:
+        #     Final_electrons.append(np.max(cell_data)/9.1-200/9.1)              
+ 
+plt.figure() 
+plt.plot(cell_data) 
+
+model = models.Cellpose(gpu=True, model_type='cyto')
+flile = r'C:\\Users\zhu\Desktop\Figure\Quantification\raw_data'
+# data_files = ['C:\\Users\zhu\Desktop\Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff']
+data_files = [os.path.join(flile, 'Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz27_r1.tiff')]
+data = [imread(f) for f in data_files] [0]
+data1 = np.moveaxis(data, 0, -1)
+data= data1[:,:,155:600:15]
+
+imgs = [data[:, :, i] for i in range(data.shape[2])]
+
+masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+                                         flow_threshold=0.5, do_3D=False)
+
+index_frame = range(0,30)  # Selecting frames 8 to 12
+# Final_electrons = [] # List to store the final results
+for index_frame in index_frame:
+    
+    labels = measure.label(masks[index_frame], connectivity=2, background=0)  # Label connected regions
+    # plt.figure()
+    # plt.imshow(masks[index_frame])
+    Averaged_electrons = np.zeros([len(np.unique(labels)),1])  # Initialize the result array for each frame
+    for label in np.unique(labels):
+        if label == 0: # Optionally skip background if needed
+            continue
+        # Create a mask for the current label
+        cell_data = []
+        labelMask = np.zeros(masks[index_frame].shape, dtype="uint8")
+        labelMask[labels == label] = 255
+        #
+        # plt.figure()
+        # plt.imshow(labelMask)
+        # Find indices of the current label
+        indices = np.where(labelMask == 255)
+        
+        # Calculate the mean across the third axis of data1 for the selected indices
+        cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
+        # cell_data = data1[indices[0], indices[1],:]
+        
+        Averaged_electrons[label,0] = np.max(cell_data)-200
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
+            Final_electrons.append(np.max(cell_data)/9.1-200/9.1)   
+
+        # if np.size(indices[0])>=80:
+        #     Final_electrons.append(np.max(cell_data)/9.1-200/9.1)              
+ 
+plt.figure() 
+plt.plot(cell_data) 
 #%%
 combined_data = [Final_electrons, Final_electrons1]
 
@@ -329,16 +532,16 @@ ax = sns.violinplot(data=combined_data, palette=["#501d8a", "#e55709"], inner="q
 plt.xticks([0, 1], ['Embryo #1', 'Embryo #2'], fontsize=12)
 plt.ylabel('Average Electrons per Pixel', fontsize=12)
 plt.gca().tick_params(axis='y', labelsize=12)
-y_index1 = 13.5
-y_index2 = 14.5
+y_index1 = 12.9
+y_index2 = 13.9
 # Calculate, mark, and annotate the mean values and sample counts
 for i, data in enumerate(combined_data):
     mean_value = np.mean(data)
     # Mark the mean with a black dot
     # ax.scatter(i, mean_value, color='k', s=50, zorder=3)
     # Annotate the mean value and sample count
-    ax.text(i+0.1, y_index1, f'$\mu$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
-    ax.text(i+0.1, y_index2, f'$N$ = {sample_counts[i]:.0f}', color='k', ha='left',va='top', fontsize=12)
+    ax.text(i-0.45, y_index1, f'$\mu$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
+    ax.text(i-0.45, y_index2, f'$N$ = {sample_counts[i]:.0f}', color='k', ha='left',va='top', fontsize=12)
 
 # Adjust the layout for better visibility and show the plot
 plt.tight_layout()
