@@ -211,12 +211,11 @@ for index_frame in index_frame:
         cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
         
         Averaged_electrons[label,0] = np.max(cell_data)-200
-        if np.max(cell_data)-200 >=30:
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
             Final_electrons1.append(np.max(cell_data)/9.1-200/9.1)                
  
 plt.figure() 
 plt.plot(Final_electrons1)   
-
 
 #%%
 import seaborn as sns
@@ -253,16 +252,6 @@ imgs = [data[:, :, i] for i in range(data.shape[2])]
 masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
                                          flow_threshold=0.5, do_3D=False)
 
-# nimg = len(imgs)
-# for idx in range(nimg):
-#     maski = masks[idx]
-#     flowi = flows[idx][0]
-
-#     fig = plt.figure(figsize=(12,5))
-#     plot.show_segmentation(fig, imgs[idx], maski, flowi)
-#     plt.tight_layout()
-#     plt.show()
-
 index_frame = range(0,30)  # Selecting frames 8 to 12
 Final_electrons = [] # List to store the final results
 for index_frame in index_frame:
@@ -286,13 +275,17 @@ for index_frame in index_frame:
         
         # Calculate the mean across the third axis of data1 for the selected indices
         cell_data = np.mean(data1[indices[0], indices[1],:], axis=0)
+        # cell_data = data1[indices[0], indices[1],:]
         
         Averaged_electrons[label,0] = np.max(cell_data)-200
-        if np.max(cell_data)-200 >=30:
-            Final_electrons.append(np.max(cell_data)/9.1-200/9.1)                
+        if np.max(cell_data)-200 >=70 and np.size(indices[0])>=80:
+            Final_electrons.append(np.max(cell_data)/9.1-200/9.1)   
+
+        # if np.size(indices[0])>=80:
+        #     Final_electrons.append(np.max(cell_data)/9.1-200/9.1)              
  
 plt.figure() 
-plt.plot(Final_electrons)   
+plt.plot(cell_data)   
 #%%
 combined_data = [Final_electrons, Final_electrons1]
 
@@ -336,16 +329,16 @@ ax = sns.violinplot(data=combined_data, palette=["#501d8a", "#e55709"], inner="q
 plt.xticks([0, 1], ['Embryo #1', 'Embryo #2'], fontsize=12)
 plt.ylabel('Average Electrons per Pixel', fontsize=12)
 plt.gca().tick_params(axis='y', labelsize=12)
-y_index1 = 11
-y_index2 = 12
+y_index1 = 13.5
+y_index2 = 14.5
 # Calculate, mark, and annotate the mean values and sample counts
 for i, data in enumerate(combined_data):
     mean_value = np.mean(data)
     # Mark the mean with a black dot
     # ax.scatter(i, mean_value, color='k', s=50, zorder=3)
     # Annotate the mean value and sample count
-    ax.text(i+0.07, y_index1, f'$\mu$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
-    ax.text(i+0.07, y_index2, f'$N$ = {sample_counts[i]:.0f}', color='k', ha='left',va='top', fontsize=12)
+    ax.text(i+0.1, y_index1, f'$\mu$ ={mean_value:.2f}', color='k', ha='left', va='top', fontsize=12)
+    ax.text(i+0.1, y_index2, f'$N$ = {sample_counts[i]:.0f}', color='k', ha='left',va='top', fontsize=12)
 
 # Adjust the layout for better visibility and show the plot
 plt.tight_layout()

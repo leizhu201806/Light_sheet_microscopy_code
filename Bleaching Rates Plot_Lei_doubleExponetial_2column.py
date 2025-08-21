@@ -678,6 +678,111 @@ mark_inset(ax1, axins, loc1=2, loc2=4, fc="none", ec="0.5")
 plt.show()
 plt.tight_layout()
 
+#%% Logscale
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
+
+plt.rcParams['font.size'] = 12
+plt.rcParams['axes.linewidth'] = 2
+plt.rcParams['figure.figsize'] = [5.2, 3.88]
+plt.figure()
+factor = 40
+
+# Order and colors
+order = [0, 1, 2, 3]
+colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
+
+test_name_pool = ['4MHz','2x2x2MHz','4x2MHz','8MHz']
+num_rows = 75
+eps = 1e-3  # small offset to avoid log(0)
+
+for i, label in enumerate(test_name_pool):
+    key = 'All_' + label + 'points'
+    D2_points = np.array(Inten_points_dict[key])
+    original_data = np.zeros(D2_points.shape)
+    
+    for index_yin in range(D2_points.shape[0]):
+        column_data = D2_points[index_yin, :]
+        a = 0
+        b = column_data.max()
+        normalized = (column_data - a) / (b - a + 1e-12)
+        original_data[index_yin, :] = normalized
+    
+    mean_values = np.mean(original_data, axis=0) + eps
+    std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
+    
+    plt.errorbar(np.linspace(1, num_rows, num_rows) * factor,
+                 mean_values, yerr=std_err,
+                 alpha=1.0, fmt=':', capsize=3, capthick=2,
+                 color=colors[order[i]], label=label)
+    plt.fill_between(np.linspace(1, 75, num_rows) * factor,
+                     mean_values - std_err, mean_values + std_err,
+                     alpha=0.1, color=colors[order[i]])
+
+plt.xlim((0.01, num_rows * factor))
+plt.legend(fontsize=12, frameon=False)
+plt.xlabel('Image number', fontsize=14)
+plt.ylabel('2P signal (a.u.)', fontsize=14)
+
+from matplotlib.ticker import LogLocator, ScalarFormatter
+
+plt.yscale("log")
+
+ax = plt.gca()
+
+# Major ticks at powers of 10
+ax.yaxis.set_major_locator(LogLocator(base=10.0))
+
+# Optional: add minor ticks between (2,3,...9)
+ax.yaxis.set_minor_locator(LogLocator(base=10.0, subs=np.arange(1.0, 10.0) * 0.1, numticks=10))
+
+# Force numeric labels instead of scientific notation
+formatter = ScalarFormatter()
+formatter.set_scientific(False)
+formatter.set_useOffset(False)
+ax.yaxis.set_major_formatter(formatter)
+
+
+
+# # Create inset
+# ax1 = plt.gca()
+# x1, x2, y1, y2 = 3*4*factor, 3*7*factor, 0.30, 0.55  # keep raw values
+# axins = inset_axes(ax1, width="70%", height="70%", loc='upper right',
+#                    bbox_to_anchor=(0.25, 0.25, 0.47, 0.47),
+#                    bbox_transform=ax1.transAxes)
+
+# for i, label in enumerate(test_name_pool):
+#     key = 'All_' + label + 'points'
+#     D2_points = np.array(Inten_points_dict[key])
+#     original_data = np.zeros(D2_points.shape)
+    
+#     for index_yin in range(D2_points.shape[0]):
+#         column_data = D2_points[index_yin, :] - 100
+#         a = column_data.min()
+#         b = column_data.max()
+#         normalized = (column_data - a) / (b - a + 1e-12)
+#         original_data[index_yin, :] = normalized
+    
+#     mean_values = np.mean(original_data, axis=0) + eps
+#     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
+    
+#     axins.errorbar(np.linspace(1, num_rows, num_rows) * factor,
+#                    mean_values, yerr=std_err,
+#                    alpha=1.0, fmt=':', capsize=3, capthick=2,
+#                    color=colors[order[i]])
+#     axins.fill_between(np.linspace(1, 75, num_rows) * factor,
+#                        mean_values - std_err, mean_values + std_err,
+#                        alpha=0.1, color=colors[order[i]])
+
+# axins.set_xlim(x1, x2)
+# axins.set_ylim(y1, y2)      # works fine with log scale
+# axins.set_yscale("log")     # let matplotlib do the log transform
+# axins.set_xticklabels([])
+# axins.set_yticklabels([])
+
+# mark_inset(ax1, axins, loc1=2, loc2=4, fc="none", ec="0.5")
+
 #%% save file
 newpath = DIR + "/draft/" + 'paper'
 if not os.path.exists(newpath):
