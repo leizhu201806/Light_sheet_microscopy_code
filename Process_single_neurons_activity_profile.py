@@ -51,25 +51,25 @@ plt.rcParams['axes.linewidth'] = 2
 file_path = r'C:\Users\zhu\Desktop\Figure\Neurons Activity\original data'
 file_path1 = file_path+ '\Plot Values 1.csv'
 file_path2 = file_path+ '\Plot Values 2.csv'
-# file_path3 = file_path+ '\Plot Values 3.csv'
-# file_path4 = file_path+ '\Plot Values 4.csv'
-# file_path5 = file_path+ '\Plot Values 5.csv'
-# file_path6 = file_path+ '\Plot Values 6.csv'
+file_path3 = file_path+ '\Plot Values 3.csv'
+file_path4 = file_path+ '\Plot Values 4.csv'
+file_path5 = file_path+ '\Plot Values 5.csv'
+file_path6 = file_path+ '\Plot Values 6.csv'
 # file_path7 = file_path+ '\Plot Values 7.csv'
 
 # Process each file and calculate ΔF/F
 delta_F_F1 = process_file(file_path1)
 delta_F_F2 = process_file(file_path2)
-# delta_F_F3 = process_file(file_path3)
-# delta_F_F4 = process_file(file_path4)
-# delta_F_F5 = process_file(file_path5)
-# delta_F_F6 = process_file(file_path6)
+delta_F_F3 = process_file(file_path3)
+delta_F_F4 = process_file(file_path4)
+delta_F_F5 = process_file(file_path5)
+delta_F_F6 = process_file(file_path6)
 # delta_F_F7 = process_file(file_path7)
 
 
 # Load time from the first file (assuming all files have the same time vector)
 time_data = pd.read_csv(file_path1)
-time = 0.00097 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
+time = 0.001 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
 # time = 0.00237 * time_data.iloc[:, 0].values # Adjust based on your needs 465
 
 # Add offsets to the profiles for better visualization
@@ -80,10 +80,10 @@ offset3 = 2.0  # Offset for the third profile
 plt.figure(figsize=(5, 2.0))
 plt.plot(time, delta_F_F1 + 0, linewidth=2, label='ROI 1')  # Profile 1 (original)
 plt.plot(time, delta_F_F2 + offset2, linewidth=2, label='ROI 2')  # Profile 2 (with offset)
-# plt.plot(time, delta_F_F3 + offset3, linewidth=2, label='ROI 3')  # Profile 3 (with offset)
-# plt.plot(time, delta_F_F4 + 3, linewidth=2, label='ROI 4')  # Profile 1 (original)
-# plt.plot(time, delta_F_F5 + 4, linewidth=2, label='ROI 5')  # Profile 2 (with offset)
-# plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F3 + offset3, linewidth=2, label='ROI 3')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F4 + 3, linewidth=2, label='ROI 4')  # Profile 1 (original)
+plt.plot(time, delta_F_F5 + 4, linewidth=2, label='ROI 5')  # Profile 2 (with offset)
+plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with offset)
 # plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with offset)
 
 
@@ -91,7 +91,7 @@ plt.plot(time, delta_F_F2 + offset2, linewidth=2, label='ROI 2')  # Profile 2 (w
 plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
 # plt.yticks([0,1, 2, 3, 4,5,6,7,8])  # Set specific Y-axis tick values
-plt.yticks([0,1, 2])  # Set specific Y-axis tick values
+plt.yticks([0,1, 2, 3, 4,5,6,7])  # Set specific Y-axis tick values
 # Label the plot
 plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
@@ -101,5 +101,5 @@ plt.ylabel('100% $\\Delta F/F$', fontsize=12)
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 2.5])
+plt.ylim([0, 6.5])
 plt.show()
