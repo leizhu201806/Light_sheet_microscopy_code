@@ -18,7 +18,7 @@ def process_file(file_path):
     F_raw = data.iloc[:, 1].values  # Second column as fluorescence data
 
     # Parameters for the sliding window
-    window_size = 4000  # Size of the sliding window (number of points)
+    window_size = 8000  # Size of the sliding window (number of points)
     half_window = window_size // 2  # Half of the window size for centering
     delta_F_F = np.zeros_like(F_raw)  # Pre-allocate delta F/F
     delta_F_F = np.float32(delta_F_F)
@@ -31,13 +31,14 @@ def process_file(file_path):
         # Calculate the baseline as the 10th percentile of fluorescence in the current window
         F_baseline = np.percentile(F_raw[start_idx:end_idx], 10)
                
-        D = np.floor(F_baseline) -1
+        D = np.floor(F_baseline)-2
         # D =  np.nanmin(F_raw[start_idx:end_idx]) - 2
         # Calculate ΔF/F for the current time point
         delta_F_F[i] = (F_raw[i] - F_baseline) / (F_baseline - D)
 
     # Apply median filter to the ΔF/F data
-    delta_F_F = medfilt(delta_F_F, kernel_size=101)  # Adjust the window size for the median filter
+    delta_F_F = medfilt(delta_F_F, kernel_size=201)  # Adjust the window size for the median filter
+    # delta_F_F = medfilt(delta_F_F, kernel_size=101)  # Adjust the window size for the median filter
     
     return delta_F_F
 
@@ -66,7 +67,6 @@ delta_F_F5 = process_file(file_path5)
 delta_F_F6 = process_file(file_path6)
 # delta_F_F7 = process_file(file_path7)
 
-
 # Load time from the first file (assuming all files have the same time vector)
 time_data = pd.read_csv(file_path1)
 time = 0.001 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
@@ -91,7 +91,7 @@ plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with of
 plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
 # plt.yticks([0,1, 2, 3, 4,5,6,7,8])  # Set specific Y-axis tick values
-plt.yticks([0,1, 2, 3, 4,5,6,7])  # Set specific Y-axis tick values
+plt.yticks([0,1, 2, 3, 4,5,6])  # Set specific Y-axis tick values
 # Label the plot
 plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
@@ -101,5 +101,5 @@ plt.ylabel('100% $\\Delta F/F$', fontsize=12)
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 6.5])
+plt.ylim([0, 6.0])
 plt.show()

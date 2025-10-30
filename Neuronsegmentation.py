@@ -50,6 +50,7 @@ def mask_overlay(img, masks, colors=None):
 #%%
 
 model = models.Cellpose(gpu=True, model_type='cyto')
+# model = models.Cellpose(gpu=True)
 flile = r'C:\\Users\zhu\Desktop\Neuron data\Z08_4dpf_jrgeco_XYT_1070nm_2x2x4MHz_145mW'
 # data_files = ['C:\\Users\zhu\Desktop\Z05_4dpf_mcherry_XYTZ_1070nm_2x2x4MHz_158mWz29_r1.tiff']
 data_files = [os.path.join(flile, 'Z08_4dpf_jrgeco_XYT_1070nm_2x2x4MHz_145mWz0_r1.tiff')]
@@ -59,5 +60,16 @@ data= data1[:,:,100:550:15]
 
 imgs = [data[:, :, i] for i in range(data.shape[2])]
 
-masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+mean_imgs = np.mean(data1,axis =2)
+
+# masks, flows, styles, diams = model.eval(imgs, diameter=None, channels=[0,0],
+#                                          flow_threshold=0.5, do_3D=False)
+masks, flows, styles, diams = model.eval(mean_imgs, diameter=None, channels=[0,0,0],
                                          flow_threshold=0.5, do_3D=False)
+
+masks, flows, styles, diams = model.eval(mean_imgs, flow_threshold=0.7, cellprob_threshold=0.6)
+
+mask_RGB = mask_overlay(mean_imgs, masks, colors=None)
+plt.figure()
+plt.imshow(mean_imgs,vmin=np.min(mean_imgs),vmax= np.max(mean_imgs),cmap='gray')
+plt.imshow(mask_RGB,alpha=0.3)
