@@ -74,7 +74,7 @@ plt.plot(10, 75, 'ko',  markersize=10)
 
 plt.plot(16, 115, 'ko',  markersize=10)
 
-plt.axhline(y=115, color= [1,0,0], linestyle='--', linewidth=2, label=r'$P_{TE}$ @ 1070 nm')
+plt.axhline(y=115, color= [1,0,0], linestyle='-.', linewidth=2, label=r'$P_{TE}$ @ 1070 nm')
 plt.axhline(y=75, color= colors[1], linestyle='--', linewidth=2, label=r'$P_{TE}$ @ 1030 nm' )
 plt.xlabel(r'Laser frequency ($MHz$)', fontsize=14)
 plt.ylabel(r'$P$ ($mW$) at sample', fontsize=14)
