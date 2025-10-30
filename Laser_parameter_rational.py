@@ -62,7 +62,7 @@ colors = plt.cm.tab20(np.linspace(0, 0.1, 2))
 plt.figure(figsize=(6, 5))
 plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
-plt.plot(1 / T, PNL1, 'k', linewidth=2, label=r'$P_{NL}$ Nonlinear photondamage threshold')
+plt.plot(1 / T, PNL1, 'k', linewidth=2, label=r'$P_{NL}$ Nonlinear photondamage threshold from [16]')
 # plt.plot(1 / T, PNL2, 'ro-', linewidth=2,  label=r'$P_{NL}$ $\tau=150fs$')
 plt.plot(1 / T, PNLlimit1, 'k:', linewidth=2, label=r'$P_{Imaging}$ Optimal imaging power')
 plt.plot(1 / T, PNLlimit1/0.8, 'k:', linewidth=2)
@@ -74,7 +74,7 @@ plt.plot(10, 75, 'ko',  markersize=10)
 
 plt.plot(16, 115, 'ko',  markersize=10)
 
-plt.axhline(y=115, color= colors[0], linestyle='--', linewidth=2, label=r'$P_{TE}$ @ 1070 nm')
+plt.axhline(y=115, color= [1,0,0], linestyle='--', linewidth=2, label=r'$P_{TE}$ @ 1070 nm')
 plt.axhline(y=75, color= colors[1], linestyle='--', linewidth=2, label=r'$P_{TE}$ @ 1030 nm' )
 plt.xlabel(r'Laser frequency ($MHz$)', fontsize=14)
 plt.ylabel(r'$P$ ($mW$) at sample', fontsize=14)

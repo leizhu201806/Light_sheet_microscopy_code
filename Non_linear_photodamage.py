@@ -75,17 +75,17 @@ plt.rcParams['font.size'] = 12
 plt.rcParams['axes.linewidth'] = 2
 
 
-plt.plot(1 / T, PNL1, 'k-', linewidth=2, label=r'$P_{NL}$ Scaling law @ 1030 $nm$ from Maioli 2020')
+plt.plot(1 / T, PNL1, 'k-', linewidth=2, label=r'$P_{NL}$ Nonlinear photodamage threshold from [16]')
 #plt.plot([1, 80], [115, 115], '--', linewidth=2, color=[0.5, 0.5, 0.5], label='Thermal effect threshold @ 1070 $nm$')
 
-plt.plot(dataf[k1], dataPNL[k1], 'k*', linewidth=2, markersize=8, label= r'No splitting @ 1030 $nm$')
+plt.plot(dataf[k1], dataPNL[k1], 'k*', color=[1, 0.5, 0],linewidth=2, markersize=8, label= r'No splitting @ 1030 $nm$')
 plt.plot(dataf[k2], dataPNL[k2], 'o', color=[1, 0.5, 0], linewidth=2, markersize=8, label= r'2x splitting @ 1030 $nm$')
-plt.plot(dataf[k3], dataPNL[k3], '^', color=[0, 0, 1], linewidth=2, markersize=8, label=r'2x2x splitting @ 1030 $nm$')
-plt.plot(dataf[k4], dataPNL[k4], 'k<', linewidth=2, markersize=12, label=r'No splitting @ 1070 $nm$')
-plt.plot(dataf[k5], dataPNL[k5], 'k>', color=[1, 0.5, 0], linewidth=2, markersize=12, label=r'2x splitting @ 1070 $nm$')
+plt.plot(dataf[k3], dataPNL[k3], '^', color=[1, 0.5, 0], linewidth=2, markersize=8, label=r'2x2x splitting @ 1030 $nm$')
+plt.plot(dataf[k4], dataPNL[k4], 'k<', color=[1, 0, 0],linewidth=2, markersize=12, label=r'No splitting @ 1070 $nm$')
+plt.plot(dataf[k5], dataPNL[k5], 'k>', color=[1, 0, 0], linewidth=2, markersize=12, label=r'2x splitting @ 1070 $nm$')
 
 plt.ylabel(r'$P_{NL}$ ($mW$) at sample', fontsize=14)
-plt.xlabel(r'Laser frequency ($MHz$)', fontsize=14)
+plt.xlabel(r'Average pulse frequency ($MHz$)', fontsize=14)
 plt.xscale('log')
 plt.yscale('log')
 plt.grid(True, which='both', linestyle='--', alpha=0.6)

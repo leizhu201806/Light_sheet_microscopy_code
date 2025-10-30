@@ -514,7 +514,7 @@ comparisons = [("4MHz", "2x2MHz"), ("8MHz", "2x2x2MHz")]
 plt.ylim(-50, 500)
 # Add labels and formatting
 plt.ylabel('2P signal (a.u.)', fontsize=14)
-plt.xlabel('Laser frequency', fontsize=14)
+plt.xlabel('Average pulse frequency', fontsize=14)
 plt.xticks(rotation=0, ha='center')
 
 # Modify the x-tick labels with LaTeX formatting for "MHz"
@@ -550,7 +550,7 @@ for comp in comparisons:
 # Add labels and formatting
 plt.ylim(-50, 500)
 plt.ylabel('2P signal (a.u.)', fontsize=14)
-plt.xlabel('Laser frequency', fontsize=14)
+plt.xlabel('Average pulse frequency', fontsize=14)
 plt.xticks(rotation=0, ha='center')
 
 # Modify x-tick labels with LaTeX formatting

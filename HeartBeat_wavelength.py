@@ -127,7 +127,8 @@ ax1.set_ylim([6.8, 1.05 * max([np.max(points) for points in all_points])])
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
 colors = colors[::-1]  # Reversing the color order
-
+colors[1] = np.array([1, 0, 0, 1])
+                     
 # Setting up matplotlib parameters
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2
@@ -136,6 +137,7 @@ plt.rcParams['axes.linewidth'] = 2
 fig = plt.figure(figsize=(4.72, 4.03))
 
 sns.violinplot(data=all_points, inner="quart", palette=colors)
+# sns.violinplot(data=all_points, inner="quart", palette=["orange", "red"])
 # Calculate and annotate mean values
 for i, points in enumerate(all_points):
     mean_value = np.mean(points)
@@ -225,6 +227,7 @@ all_points = [np.array(points_dict['profile_' + label]) for label in test_name_p
 order = [0, 1]
 colors = plt.cm.tab20(np.linspace(0, 0.1, len(order)))
 colors = colors[::-1]
+colors[1] = np.array([1, 0, 0, 1])
 # Setting up matplotlib parameters
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.linewidth'] = 2

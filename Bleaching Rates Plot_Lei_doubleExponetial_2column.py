@@ -391,7 +391,7 @@ sns.violinplot(data=all_points, palette=colors, ax=ax1)
 ax1.set_xticks(range(len(test_name_pool)))
 # ax1.set_xticklabels(test_name_pool, rotation=0, fontsize=12, ha='center')
 ax1.set_ylabel(r'Photobleaching rate $k$', fontsize=14)
-ax1.set_xlabel('Laser frequency', fontsize=14)
+ax1.set_xlabel('Average pulse frequency', fontsize=14)
 
 import matplotlib.ticker as mticker
 
