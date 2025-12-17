@@ -549,8 +549,8 @@ for comp in comparisons:
 
 # Add labels and formatting
 plt.ylim(-50, 500)
-plt.ylabel('2P signal (a.u.)', fontsize=14)
-plt.xlabel('Average pulse frequency', fontsize=14)
+plt.ylabel('2PEF signal (a.u.)', fontsize=15)
+plt.xlabel('Average pulse frequency', fontsize=15)
 plt.xticks(rotation=0, ha='center')
 
 # Modify x-tick labels with LaTeX formatting

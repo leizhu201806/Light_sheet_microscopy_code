@@ -631,15 +631,15 @@ for i, label in enumerate(test_name_pool):
     
     mean_values = np.mean(original_data, axis=0)
     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
-    
+    legend_label = '2x4MHz' if label == '4x2MHz' else label
     # Plotting error bars with specified colors
-    plt.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=label)
+    plt.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=legend_label)
     plt.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
-
+legend_label = '2x4MHz' if label == '4x2MHz' else label
 plt.xlim((0.01, num_rows * factor))
-plt.legend(fontsize=12, frameon=False)
-plt.xlabel('Image number', fontsize=14)
-plt.ylabel('2P signal (a.u.)', fontsize=14)
+plt.legend(fontsize=14, frameon=False)
+plt.xlabel('Image number', fontsize=15)
+plt.ylabel('2PEF signal (a.u.)', fontsize=15)
 
 # Create a secondary x-axis for the second row of labels
 ax1 = plt.gca()
