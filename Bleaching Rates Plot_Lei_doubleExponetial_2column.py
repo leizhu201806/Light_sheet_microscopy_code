@@ -407,7 +407,7 @@ for i, label in enumerate(comparisons):
     group1 = points_dict['All_' + label[0] + 'points']
     group2 = points_dict['All_' + label[1] + 'points']
     t_stat, p_val = stats.ttest_ind(group1, group2)
-    
+    legend_label = '2x4MHz' if label == '4x2MHz' else label
     # Find y-position for the annotation
     y_max = max(np.max(group1), np.max(group2))
     x1, x2 = test_name_pool.index(label[0]), test_name_pool.index(label[1])
@@ -436,9 +436,16 @@ for i, label in enumerate(test_name_pool):
 # Connect the median values with a line
 ax1.plot(range(len(median_values)), median_values, color='k', linestyle='--', linewidth=1.5, marker='o', markersize=5, label="Median")
 # Modify the x-tick labels with LaTeX formatting for "MHz"
-x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
-plt.gca().set_xticklabels(x_labels, fontsize=12)
+# x_labels = [r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$' for label in test_name_pool]
+# plt.gca().set_xticklabels(x_labels, fontsize=12)
 
+def display_label(label):
+    if label == '4x2MHz':
+        label = '2x4MHz'
+    return r'$\mathit{' + label.replace("MHz", r'\ MHz') + '}$'
+
+x_labels = [display_label(label) for label in test_name_pool]
+ax1.set_xticklabels(x_labels, fontsize=12)
 
 # plt.tight_layout()
 plt.show()
@@ -614,6 +621,11 @@ colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 test_name_pool = ['4MHz','2x2x2MHz','4x2MHz','8MHz']
 num_rows = 75
 
+def format_label(label):
+    if label == '4x2MHz':
+        label = '2x4MHz'
+    return label.replace("MHz", "$\\mathit{MHz}$")
+
 for i, label in enumerate(test_name_pool):
     key = 'All_' + label + 'points'
     D2_points = np.array(Inten_points_dict[key])
@@ -631,13 +643,17 @@ for i, label in enumerate(test_name_pool):
     
     mean_values = np.mean(original_data, axis=0)
     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
-    legend_label = '2x4MHz' if label == '4x2MHz' else label
+    # legend_label = '2x4MHz' if label == '4x2MHz' else label
+    # legend_label.replace("MHz", "$\\mathit{MHz}$")
+    legend_label = format_label(label)
     # Plotting error bars with specified colors
     plt.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=legend_label)
     plt.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
-legend_label = '2x4MHz' if label == '4x2MHz' else label
+
 plt.xlim((0.01, num_rows * factor))
-plt.legend(fontsize=14, frameon=False)
+  
+
+plt.legend(fontsize=12, frameon=False)
 plt.xlabel('Image number', fontsize=15)
 plt.ylabel('2PEF signal (a.u.)', fontsize=15)
 
