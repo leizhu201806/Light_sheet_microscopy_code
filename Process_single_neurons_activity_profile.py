@@ -16,7 +16,7 @@ def process_file(file_path):
     data = pd.read_csv(file_path)
     # time = data.iloc[:, 0].values  # First column as time (adjust depending on the file structure)
     F_raw = data.iloc[:, 1].values  # Second column as fluorescence data
-
+    # F_raw = medfilt(F_raw, kernel_size=51)
     # Parameters for the sliding window
     window_size = 8000  # Size of the sliding window (number of points)
     half_window = window_size // 2  # Half of the window size for centering
@@ -31,13 +31,13 @@ def process_file(file_path):
         # Calculate the baseline as the 10th percentile of fluorescence in the current window
         F_baseline = np.percentile(F_raw[start_idx:end_idx], 10)
                
-        D = np.floor(F_baseline)-2
+        D = np.floor(F_baseline)-1
         # D =  np.nanmin(F_raw[start_idx:end_idx]) - 2
         # Calculate ΔF/F for the current time point
         delta_F_F[i] = (F_raw[i] - F_baseline) / (F_baseline - D)
 
     # Apply median filter to the ΔF/F data
-    delta_F_F = medfilt(delta_F_F, kernel_size=201)  # Adjust the window size for the median filter
+    # delta_F_F = medfilt(delta_F_F, kernel_size=201)  # Adjust the window size for the median filter
     # delta_F_F = medfilt(delta_F_F, kernel_size=101)  # Adjust the window size for the median filter
     
     return delta_F_F
@@ -49,14 +49,15 @@ plt.rcParams['font.size'] = 18
 plt.rcParams['axes.linewidth'] = 2
 
 # Define file paths for three CSV files
-file_path = r'C:\Users\zhu\Desktop\Figure\Neurons Activity\original data'
+# file_path = r'C:\Users\zhu\Desktop\Figure\Neurons Activity\original data'
+file_path = r'C:\Users\zhu\Desktop\Figure\Neurons Activity\original data2'
 file_path1 = file_path+ '\Plot Values 1.csv'
 file_path2 = file_path+ '\Plot Values 2.csv'
 file_path3 = file_path+ '\Plot Values 3.csv'
 file_path4 = file_path+ '\Plot Values 4.csv'
 file_path5 = file_path+ '\Plot Values 5.csv'
 file_path6 = file_path+ '\Plot Values 6.csv'
-# file_path7 = file_path+ '\Plot Values 7.csv'
+file_path7 = file_path+ '\Plot Values 7.csv'
 
 # Process each file and calculate ΔF/F
 delta_F_F1 = process_file(file_path1)
@@ -65,12 +66,12 @@ delta_F_F3 = process_file(file_path3)
 delta_F_F4 = process_file(file_path4)
 delta_F_F5 = process_file(file_path5)
 delta_F_F6 = process_file(file_path6)
-# delta_F_F7 = process_file(file_path7)
+delta_F_F7 = process_file(file_path7)
 
 # Load time from the first file (assuming all files have the same time vector)
 time_data = pd.read_csv(file_path1)
-time = 0.001 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
-# time = 0.00237 * time_data.iloc[:, 0].values # Adjust based on your needs 465
+# time = 0.001 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
+time = 0.00237 * time_data.iloc[:, 0].values # Adjust based on your needs 465
 
 # Add offsets to the profiles for better visualization
 offset2 = 1.0  # Offset for the second profile
@@ -84,7 +85,7 @@ plt.plot(time, delta_F_F3 + offset3, linewidth=2, label='ROI 3')  # Profile 3 (w
 plt.plot(time, delta_F_F4 + 3, linewidth=2, label='ROI 4')  # Profile 1 (original)
 plt.plot(time, delta_F_F5 + 4, linewidth=2, label='ROI 5')  # Profile 2 (with offset)
 plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with offset)
-# plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with offset)
 
 
 # Change the font size of the ticks
@@ -97,9 +98,9 @@ plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
 plt.ylabel('100% $\\Delta F/F$', fontsize=12)
 # plt.ylabel('100% ΔF/F', fontsize=12, fontstyle='italic')
-# plt.title('Neuronal Activity (ΔF/F) from Three Files with Different Heights')
+plt.title('WO median filter')
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 6.0])
+plt.ylim([0, 8.0])
 plt.show()
