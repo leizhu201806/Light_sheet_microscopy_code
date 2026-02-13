@@ -657,8 +657,8 @@ plt.xlim((0.01, num_rows * factor))
   
 
 plt.legend(fontsize=12, frameon=False)
-plt.xlabel('Image number', fontsize=15)
-plt.ylabel('2PEF signal (a.u.)', fontsize=15)
+plt.xlabel('Image number', fontsize=12)
+plt.ylabel('2PEF signal (a.u.)', fontsize=12)
 
 # Create a secondary x-axis for the second row of labels
 ax1 = plt.gca()
