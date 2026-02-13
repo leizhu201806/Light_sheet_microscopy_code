@@ -400,80 +400,124 @@ def process_tiff_stack_fast(
         tiff_path,
         output_path,
         window_size=1500,
-        block_size=50,
+        block_size=20,
         percentile=10):
     """
     Fast rolling percentile ΔF/F computation using block processing.
-    Output shape is guaranteed to match input (t, x, y).
+
+    INPUT  shape: (t, x, y)
+    OUTPUT shape: (t, x, y)
+
+    ΔF/F(x,y,t) preserved exactly.
     """
 
     print("Opening TIFF (memory-mapped)...")
-    data = tiff.memmap(tiff_path)  # memory-mapped read
+    data = tiff.memmap(tiff_path)  # shape: (t, x, y)
     print("Original shape (t, x, y):", data.shape)
 
-    # Convert to (x, y, t)
-    data = np.transpose(data, (1, 2, 0)).astype(np.float32)
-    x, y, t = data.shape
-    print("Working shape (x, y, t):", data.shape)
+    t, x, y = data.shape
 
     if window_size >= t:
         window_size = t - 1
         print(f"Adjusted window_size to {window_size}")
 
-    # Ensure output folder exists
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    # Prepare output TIFF
-    with tiff.TiffWriter(output_path, bigtiff=True) as tif:
+    # ---------------------------------------------------------
+    # Allocate output memmap with FINAL CORRECT SHAPE
+    # ---------------------------------------------------------
+    print("Allocating output memmap...")
+    output_memmap = np.memmap(
+        output_path + ".tmp",
+        dtype=np.float16,
+        mode='w+',
+        shape=(t, x, y)
+    )
 
-        total_blocks = (x + block_size - 1) // block_size
-        block_counter = 0
+    total_blocks = (x + block_size - 1) // block_size
+    block_counter = 0
 
-        print("Starting fast rolling percentile computation...")
+    print("Starting rolling percentile computation...")
 
-        for i in range(0, x, block_size):
-            i_end = min(i + block_size, x)
-            block = data[i:i_end, :, :]  # shape: (current_block_size, y, t)
-            current_block_size = i_end - i
+    half_win = window_size // 2
 
-            # --- Compute rolling percentile per pixel ---
-            F_baseline = np.zeros_like(block, dtype=np.float32)
-            half_win = window_size // 2
+    for i in range(0, x, block_size):
+        i_end = min(i + block_size, x)
+        current_block_size = i_end - i
 
-            for xi in range(current_block_size):
-                for yi in range(y):
-                    signal = block[xi, yi, :]
-                    padded = np.pad(signal, (half_win, half_win), mode='edge')
-                    windows = np.lib.stride_tricks.sliding_window_view(
-                        padded, window_shape=window_size)
-                    F_baseline[xi, yi, :] = np.percentile(windows, percentile, axis=1)[:t]
+        # Load block: (t, block_x, y)
+        block = data[:, i:i_end, :].astype(np.float32)
 
-            # ΔF/F calculation
-            D = np.floor(F_baseline) - 1
-            epsilon = 1e-6
-            delta_F_F_block = (block - F_baseline) / (F_baseline - D + epsilon)
+        # Rearrange for easier pixelwise processing → (block_x, y, t)
+        block_xyz = np.transpose(block, (1, 2, 0))
 
-            # Write block along x dimension while preserving shape (t, x, y)
-            # Transpose (current_block_size, y, t) -> (t, current_block_size, y)
-            tif.write(np.transpose(delta_F_F_block, (2, 0, 1)).astype(np.float32), contiguous=True)
+        F_baseline = np.zeros_like(block_xyz, dtype=np.float32)
 
-            block_counter += 1
-            progress = block_counter / total_blocks * 100
-            print(f"Processing: {progress:.2f}% complete")
+        # ---------------------------------------------------------
+        # Rolling percentile per pixel
+        # ---------------------------------------------------------
+        for xi in range(current_block_size):
+            for yi in range(y):
+                signal = block_xyz[xi, yi, :]
+                padded = np.pad(signal, (half_win, half_win), mode='edge')
 
-    print("Processing finished and saved.")
-    
-    
+                windows = np.lib.stride_tricks.sliding_window_view(
+                    padded, window_shape=window_size
+                )
+
+                F_baseline[xi, yi, :] = np.percentile(
+                    windows, percentile, axis=1
+                )[:t]
+
+        # ---------------------------------------------------------
+        # ΔF/F
+        # ---------------------------------------------------------
+        D = np.floor(F_baseline) - 1
+        epsilon = 1e-6
+
+        delta_F_F = (block_xyz - F_baseline) / (F_baseline - D + epsilon)
+
+        # Convert back to (t, block_x, y)
+        delta_F_F_txy = np.transpose(delta_F_F, (2, 0, 1)).astype(np.float16)
+
+        # Insert into correct x-location
+        output_memmap[:, i:i_end, :] = delta_F_F_txy
+
+        block_counter += 1
+        progress = block_counter / total_blocks * 100
+        print(f"Processing: {progress:.2f}% complete")
+
+    # Flush memmap to disk
+    output_memmap.flush()
+
+    print("Writing final BigTIFF...")
+
+    # Save as proper TIFF with correct shape
+    tiff.imwrite(
+        output_path,
+        output_memmap,
+        bigtiff=True
+    )
+
+    # Remove temporary memmap file
+    del output_memmap
+    os.remove(output_path + ".tmp")
+
+    print("Processing finished.")
+    print("Final output shape:", (t, x, y))
+
+
+# ------------------------------------------------------------------
+# RUN
+# ------------------------------------------------------------------
+
 tiff_path = r'D:\SPIM_2P\20231010 zebrafish Jrgeco1b\Original data\Z05_5dpf_OT_jrgeco1b_XYT_1070nm_2x2x4MHz_130mW_3Daverage.tif'
 output_path = r'D:\SPIM_2P\20231010 zebrafish Jrgeco1b\Processed data\delta_F_F_fast.tif'
 
-# -----------------------------
-# RUN
-# -----------------------------
 process_tiff_stack_fast(
     tiff_path,
     output_path,
-    window_size=1500,  # recommended for 12000 frames
-    block_size=50,
+    window_size=1500,   # good for ~12000 frames
+    block_size=20,
     percentile=10
 )
