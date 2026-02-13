@@ -474,6 +474,6 @@ process_tiff_stack_fast(
     tiff_path,
     output_path,
     window_size=1500,  # recommended for 12000 frames
-    block_size=2,
+    block_size=50,
     percentile=10
 )
