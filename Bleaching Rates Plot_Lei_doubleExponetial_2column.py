@@ -621,6 +621,9 @@ colors = plt.cm.tab20(np.linspace(0, 0.4, len(order)))
 test_name_pool = ['4MHz','2x2x2MHz','4x2MHz','8MHz']
 num_rows = 75
 
+x = np.linspace(1, num_rows, num_rows) * factor
+step = 3  # show 1/3 of points
+
 def format_label(label):
     if label == '4x2MHz':
         label = '2x4MHz'
@@ -647,8 +650,8 @@ for i, label in enumerate(test_name_pool):
     # legend_label.replace("MHz", "$\\mathit{MHz}$")
     legend_label = format_label(label)
     # Plotting error bars with specified colors
-    plt.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=legend_label)
-    plt.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
+    plt.errorbar( x[::step], mean_values[::step], yerr=std_err[::step], alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]], label=legend_label)
+    plt.fill_between( x[::step], (mean_values - std_err)[::step], (mean_values + std_err)[::step], alpha=0.1, color=colors[order[i]])
 
 plt.xlim((0.01, num_rows * factor))
   
@@ -662,7 +665,7 @@ ax1 = plt.gca()
 
 # Add zoomed inset
 x1, x2, y1, y2 = 3*4*factor, 3*7*factor, 0.30, 0.55
-axins = inset_axes(ax1, width="70%", height="70%", loc='upper left', bbox_to_anchor=(0.25, 0.25, 0.47, 0.47), bbox_transform=ax1.transAxes)
+axins = inset_axes(ax1, width="70%", height="70%", loc='upper left', bbox_to_anchor=(0.25, 0.35, 0.47, 0.47), bbox_transform=ax1.transAxes)
 
 
 for i, label in enumerate(test_name_pool):
@@ -681,8 +684,8 @@ for i, label in enumerate(test_name_pool):
     std_err = np.std(original_data, axis=0) / np.sqrt(original_data.shape[0])
     
     # Plotting error bars with specified colors
-    axins.errorbar(np.linspace(1, num_rows, num_rows) * factor, mean_values, yerr=std_err, alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]])
-    axins.fill_between(np.linspace(1, 75, num_rows) * factor, mean_values - std_err, mean_values + std_err, alpha=0.1, color=colors[order[i]])
+    axins.errorbar(x[::step], mean_values[::step], yerr=std_err[::step], alpha=1.0, fmt=':', capsize=3, capthick=2, color=colors[order[i]])
+    axins.fill_between(x[::step], (mean_values - std_err)[::step], (mean_values + std_err)[::step], alpha=0.1, color=colors[order[i]])
 
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)

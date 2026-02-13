@@ -91,8 +91,8 @@ plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with of
 # Change the font size of the ticks
 plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
-# plt.yticks([0,1, 2, 3, 4,5,6,7,8])  # Set specific Y-axis tick values
-plt.yticks([0,1, 2, 3, 4,5,6])  # Set specific Y-axis tick values
+plt.yticks([0,1, 2, 3, 4,5,6,7,8])  # Set specific Y-axis tick values
+# plt.yticks([0,1, 2, 3, 4,5,6])  # Set specific Y-axis tick values
 # Label the plot
 plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
@@ -102,5 +102,5 @@ plt.title('WO median filter')
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 8.0])
+plt.ylim([0, 9.0])
 plt.show()
