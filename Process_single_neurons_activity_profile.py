@@ -18,7 +18,7 @@ def process_file(file_path):
     F_raw = data.iloc[:, 1].values  # Second column as fluorescence data
     # F_raw = medfilt(F_raw, kernel_size=51)
     # Parameters for the sliding window
-    window_size = 8000  # Size of the sliding window (number of points)
+    window_size = 4000  # Size of the sliding window (number of points)
     half_window = window_size // 2  # Half of the window size for centering
     delta_F_F = np.zeros_like(F_raw)  # Pre-allocate delta F/F
     delta_F_F = np.float32(delta_F_F)
@@ -58,6 +58,14 @@ file_path4 = file_path+ '\Plot Values 4.csv'
 file_path5 = file_path+ '\Plot Values 5.csv'
 file_path6 = file_path+ '\Plot Values 6.csv'
 file_path7 = file_path+ '\Plot Values 7.csv'
+file_path8 = file_path+ '\Plot Values 8.csv'
+file_path9 = file_path+ '\Plot Values 9.csv'
+file_path10 = file_path+ '\Plot Values 10.csv'
+file_path11 = file_path+ '\Plot Values 11.csv'
+file_path12 = file_path+ '\Plot Values 12.csv'
+file_path13 = file_path+ '\Plot Values 13.csv'
+file_path14 = file_path+ '\Plot Values 14.csv'
+
 
 # Process each file and calculate ΔF/F
 delta_F_F1 = process_file(file_path1)
@@ -67,7 +75,13 @@ delta_F_F4 = process_file(file_path4)
 delta_F_F5 = process_file(file_path5)
 delta_F_F6 = process_file(file_path6)
 delta_F_F7 = process_file(file_path7)
-
+delta_F_F8 = process_file(file_path8)
+delta_F_F9 = process_file(file_path9)
+delta_F_F10 = process_file(file_path10)
+delta_F_F11 = process_file(file_path11)
+delta_F_F12 = process_file(file_path12)
+delta_F_F13 = process_file(file_path13)
+delta_F_F14 = process_file(file_path14)
 # Load time from the first file (assuming all files have the same time vector)
 time_data = pd.read_csv(file_path1)
 # time = 0.001 * time_data.iloc[:, 0].values # Adjust based on your needs kiloHz
@@ -86,12 +100,19 @@ plt.plot(time, delta_F_F4 + 3, linewidth=2, label='ROI 4')  # Profile 1 (origina
 plt.plot(time, delta_F_F5 + 4, linewidth=2, label='ROI 5')  # Profile 2 (with offset)
 plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with offset)
 plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F8 + 7, linewidth=2, label='ROI 8')  # Profile 1 (original)
+# plt.plot(time, delta_F_F9 + 8, linewidth=2, label='ROI 9')  # Profile 2 (with offset)
+# plt.plot(time, delta_F_F10 + 9, linewidth=2, label='ROI 10')  # Profile 3 (with offset)
+# plt.plot(time, delta_F_F11 + 10, linewidth=2, label='ROI 11')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F12 + 11, linewidth=2, label='ROI 12')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F13 + 12, linewidth=2, label='ROI 13')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F14 + 13, linewidth=2, label='ROI 14')  # Profile 3 (with offset)
 
 
 # Change the font size of the ticks
 plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
-plt.yticks([0,1, 2, 3, 4,5,6,7,8])  # Set specific Y-axis tick values
+plt.yticks([0,1, 2, 3, 4,5,6,7,8,9,10,11,12,13,14])  # Set specific Y-axis tick values
 # plt.yticks([0,1, 2, 3, 4,5,6])  # Set specific Y-axis tick values
 # Label the plot
 plt.xlabel('Time[s]', fontsize=14)
@@ -102,5 +123,5 @@ plt.title('WO median filter')
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 9.0])
+plt.ylim([0, 15.0])
 plt.show()
