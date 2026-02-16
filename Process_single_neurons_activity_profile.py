@@ -92,36 +92,33 @@ offset2 = 1.0  # Offset for the second profile
 offset3 = 2.0  # Offset for the third profile
 
 # Plot the original, profile_2, and profile_3 in the same figure but with different heights
-plt.figure(figsize=(5, 2.0))
-plt.plot(time, delta_F_F1 + 0, linewidth=2, label='ROI 1')  # Profile 1 (original)
-plt.plot(time, delta_F_F2 + offset2, linewidth=2, label='ROI 2')  # Profile 2 (with offset)
-plt.plot(time, delta_F_F3 + offset3, linewidth=2, label='ROI 3')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F4 + 3, linewidth=2, label='ROI 4')  # Profile 1 (original)
-plt.plot(time, delta_F_F5 + 4, linewidth=2, label='ROI 5')  # Profile 2 (with offset)
-plt.plot(time, delta_F_F6 + 5, linewidth=2, label='ROI 6')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F7 + 6, linewidth=2, label='ROI 7')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F8 + 7, linewidth=2, label='ROI 8')  # Profile 1 (original)
-# plt.plot(time, delta_F_F9 + 8, linewidth=2, label='ROI 9')  # Profile 2 (with offset)
-# plt.plot(time, delta_F_F10 + 9, linewidth=2, label='ROI 10')  # Profile 3 (with offset)
-# plt.plot(time, delta_F_F11 + 10, linewidth=2, label='ROI 11')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F12 + 11, linewidth=2, label='ROI 12')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F13 + 12, linewidth=2, label='ROI 13')  # Profile 3 (with offset)
-plt.plot(time, delta_F_F14 + 13, linewidth=2, label='ROI 14')  # Profile 3 (with offset)
+plt.figure(figsize=(5, 4.0))
+plt.plot(time, delta_F_F1 + 0, linewidth=2, label='Cell 1')  # Profile 1 (original)
+plt.plot(time, delta_F_F14 + 1, linewidth=2, label='Cell 2')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F4 + 2, linewidth=2, label='Cell 3')  # Profile 1 (original)
+plt.plot(time, delta_F_F5 + 3, linewidth=2, label='Cell 4')  # Profile 2 (with offset)
+plt.plot(time, delta_F_F6 + 4, linewidth=2, label='Cell 5')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F3 + 5, linewidth=2, label='Cell 6')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F12 + 6, linewidth=2, label='Cell 7')  # Profile 3 (with offset)
+plt.plot(time, delta_F_F13 + 7, linewidth=2, label='Cell 8')  # Profile 3 (with offset)
+
+plt.plot(time, delta_F_F2 + 8, linewidth=2, label='ROI 1')  # Profile 2 (with offset)
+plt.plot(time, delta_F_F7 + 9, linewidth=2, label='ROI 2')  # Profile 3 (with offset)
 
 
 # Change the font size of the ticks
 plt.tick_params(axis='both', which='major', labelsize=10)  # Major ticks
 plt.tick_params(axis='both', which='minor', labelsize=10)   # Minor ticks (if any)
-plt.yticks([0,1, 2, 3, 4,5,6,7,8,9,10,11,12,13,14])  # Set specific Y-axis tick values
+plt.yticks([0,1, 2, 3, 4,5,6,7,8,9,10,11,12])  # Set specific Y-axis tick values
 # plt.yticks([0,1, 2, 3, 4,5,6])  # Set specific Y-axis tick values
 # Label the plot
 plt.xlabel('Time[s]', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12)
-plt.ylabel('100% $\\Delta F/F$', fontsize=12)
+plt.ylabel('100% $\\Delta F/F$', fontsize=14)
 # plt.ylabel('100% ΔF/F', fontsize=12, fontstyle='italic')
-plt.title('WO median filter')
+# plt.title('WO median filter')
 plt.legend(loc='best', fontsize=10 )
 plt.grid(False)
 plt.xlim([0, max(time)])
-plt.ylim([0, 15.0])
+plt.ylim([0, 11.0])
 plt.show()
